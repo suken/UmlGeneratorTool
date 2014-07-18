@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: UmlGenerator Plug-in
+Bundle-SymbolicName: UmlGenerator;singleton:=true
+Bundle-Version: 1.0
+Bundle-Activator: umlGenerator.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.ui,
+ org.eclipse.ltk.core.refactoring;bundle-version="3.4.1"
+Bundle-Vendor: Suken Shah
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/plantuml.jar,
+ lib/UmlGenerator.jar,
+ lib/maven-aether-provider-3.0.4.jar,
+ lib/maven-artifact-3.0.4.jar,
+ lib/maven-compat-3.0.4.jar,
+ lib/maven-core-3.0.4.jar,
+ lib/maven-embedder-3.0.4.jar,
+ lib/maven-model-3.0.4.jar,
+ lib/maven-model-builder-3.0.4.jar,
+ lib/maven-plugin-api-3.0.4.jar,
+ lib/maven-repository-metadata-3.0.4.jar,
+ lib/maven-settings-3.0.4.jar,
+ lib/maven-settings-builder-3.0.4.jar,
+ lib/plexus-utils-2.0.6.jar,
+ .

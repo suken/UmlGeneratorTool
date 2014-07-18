@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<!-- CLASS DIAGRAM -->
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            id="UmlGeneratorTool.umlTools"
+ 	  	    adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"> 
+ 		 <menu id="toolsMenu" label="UML Tools" >
+		   <separator name="toolsGroup" /> 
+		 </menu>
+		 <filter
+		  	name="projectNature"
+		  	value="org.eclipse.jdt.core.javanature" />
+         <action
+               class="umlGenerator.actions.GenerateClassDiagramAction"
+               icon="icons/ClassDiagramIcon.png"
+               id="UmlGeneratorTool.generateClassDiagram"
+               label="Generate Class Diagram"
+               menubarPath="toolsMenu/toolsGroup"
+               state="false"
+               style="push"
+               tooltip="Generate Class Diagram for the selected project.">
+         </action>
+      </objectContribution>
+      
+      <!-- COMPONENT DIAGRAM -->
+      <objectContribution
+            id="UmlGeneratorTool.umlTools"
+ 	  	    adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"> 
+         <action
+               class="umlGenerator.actions.GenerateComponentDiagramAction"
+               icon="icons/ComponentDiagramIcon.png"
+               id="UmlGeneratorTool.generateComponentDiagram"
+               label="Generate Component Diagram"
+               menubarPath="toolsMenu/toolsGroup"
+               state="false"
+               style="push"
+               tooltip="Generate Component Diagram for the selected project.">
+         </action>
+      </objectContribution>
+      
+      <!-- SPRING CLASS DIAGRAM -->
+      <objectContribution
+            id="UmlGeneratorTool.umlTools"
+ 	  	    adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"> 
+         <action
+               class="umlGenerator.actions.GenerateSpringClassDiagramAction"
+               icon="icons/SpringIcon.png"
+               id="UmlGeneratorTool.generateSpringClassDiagram"
+               label="Generate Spring Class Diagram"
+               menubarPath="toolsMenu/toolsGroup"
+               state="false"
+               style="push"
+               tooltip="Generate Spring Class Diagram for the selected project.">
+         </action>
+      </objectContribution>
+
+   </extension>
+
+</plugin>
+

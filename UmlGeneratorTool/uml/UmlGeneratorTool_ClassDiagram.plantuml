@@ -1,0 +1,65 @@
+@startuml
+ class umlGenerator.Activator{
+ # getDefault()
+ + start()
+ + stop()
+ # getImageDescriptor()
+}
+umlGenerator.Activator --|> org.eclipse.ui.plugin.AbstractUIPlugin
+umlGenerator.Activator --> umlGenerator.Activator
+
+ class umlGenerator.MultipleProjectAction{
+ + run()
+ + selectionChanged()
+ # copyFile()
+ # getNatureId()
+ # getSelectedProjects()
+ # exportProjectJar()
+ # getDepedentJars()
+ # showResultDialog()
+ # generateUml()
+}
+umlGenerator.MultipleProjectAction --|> org.eclipse.ui.IObjectActionDelegate
+
+ class umlGenerator.actions.GenerateClassDiagramAction{
+ # getNatureId()
+ + setActivePart()
+ # generateUml()
+}
+umlGenerator.actions.GenerateClassDiagramAction --|> umlGenerator.MultipleProjectAction
+
+ class umlGenerator.actions.GenerateComponentDiagramAction{
+ # getNatureId()
+ + setActivePart()
+ # generateUml()
+}
+umlGenerator.actions.GenerateComponentDiagramAction --|> umlGenerator.MultipleProjectAction
+
+ class umlGenerator.actions.GenerateSpringClassDiagramAction{
+ # getNatureId()
+ + setActivePart()
+ # generateUml()
+}
+umlGenerator.actions.GenerateSpringClassDiagramAction --|> umlGenerator.MultipleProjectAction
+
+ class umlGenerator.windows.GenerateComponentDiagramOptionsDialog{
+ # okPressed()
+ # createDialogArea()
+ + getIncludePattern()
+ + getExcludePatterns()
+}
+umlGenerator.windows.GenerateComponentDiagramOptionsDialog --|> org.eclipse.jface.dialogs.Dialog
+
+ class umlGenerator.windows.GenerateUMLOptionsDialog{
+ # okPressed()
+ # createDialogArea()
+ + getIncludePattern()
+ + getExcludePatterns()
+ + areTestsIncluded()
+ + areMethodsIncluded()
+ + areFieldsIncluded()
+ + arePackagesIncluded()
+}
+umlGenerator.windows.GenerateUMLOptionsDialog --|> org.eclipse.jface.dialogs.Dialog
+
+@enduml
