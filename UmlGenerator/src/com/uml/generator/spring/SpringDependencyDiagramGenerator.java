@@ -4,6 +4,7 @@
 package com.uml.generator.spring;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -14,6 +15,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+
 import com.uml.generator.UmlGeneratorUtility;
 import com.uml.generator.classDiagram.models.ClassType;
 import com.uml.generator.classDiagram.models.FieldModel;
@@ -91,6 +93,9 @@ public class SpringDependencyDiagramGenerator {
 						
 						// extract methods
 						extractMethods(packagesIncluded, methodsVisible, loadClass, classModel, hasAnyPatterns, includePatterns, excludePatterns);
+						
+						// extract constructors for spring depedencies
+						extractConstructorDependencies(packagesIncluded, loadClass, classModel, hasAnyPatterns, includePatterns, excludePatterns);
 					}
 					
 					// extract interfaces
@@ -197,34 +202,62 @@ public class SpringDependencyDiagramGenerator {
 	private static void extractMethods(boolean packagesIncluded, boolean methodsVisible,
 			Class<?> loadClass, SpringClassModel classModel,
 			boolean hasAnyPatterns, String[] includePatterns, String[] excludePatterns) {
-		if (methodsVisible) {
-			for (Method method : loadClass.getDeclaredMethods()) {
-				boolean hasSpringDependency = false;
-				for (Annotation annotation : method.getAnnotations()) {
-					String annotationName = annotation.annotationType().getName();
-					if (annotationName.equals(ANNOTATION_AUTOWIRED)
-							&& UmlGeneratorUtility.isIncluded(method.getParameterTypes()[0].getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
-						classModel.addDepedency(packagesIncluded ? method.getParameterTypes()[0].getName() : method.getParameterTypes()[0].getSimpleName(), DependencyType.AUTOWIRED);
-						hasSpringDependency = true;
-					}
-					else if (annotationName.equals(ANNOTATION_REQUIRED)
-							&& UmlGeneratorUtility.isIncluded(method.getParameterTypes()[0].getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
-						classModel.addDepedency(packagesIncluded ? method.getParameterTypes()[0].getName() : method.getParameterTypes()[0].getSimpleName(), DependencyType.REQUIRED);
-						hasSpringDependency = true;
-					}
-					else if (annotationName.equals(ANNOTATION_BEAN)
-							&& UmlGeneratorUtility.isIncluded(method.getParameterTypes()[0].getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
-						classModel.addDepedency(packagesIncluded ? method.getParameterTypes()[0].getName() : method.getReturnType().getSimpleName(), DependencyType.BEAN);
-					}
+		for (Method method : loadClass.getDeclaredMethods()) {
+			boolean hasSpringDependency = false;
+			for (Annotation annotation : method.getAnnotations()) {
+				String annotationName = annotation.annotationType().getName();
+				if (annotationName.equals(ANNOTATION_AUTOWIRED)
+						&& UmlGeneratorUtility.isIncluded(method.getParameterTypes()[0].getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
+					classModel.addDepedency(packagesIncluded ? method.getParameterTypes()[0].getName() : method.getParameterTypes()[0].getSimpleName(), DependencyType.AUTOWIRED);
+					hasSpringDependency = true;
 				}
-				
-				if (!hasSpringDependency && !method.isSynthetic() && !method.isBridge()) {
-					classModel.addMethod(new MethodModel(method.getName(), method.getModifiers()));
+				else if (annotationName.equals(ANNOTATION_REQUIRED)
+						&& UmlGeneratorUtility.isIncluded(method.getParameterTypes()[0].getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
+					classModel.addDepedency(packagesIncluded ? method.getParameterTypes()[0].getName() : method.getParameterTypes()[0].getSimpleName(), DependencyType.REQUIRED);
+					hasSpringDependency = true;
+				}
+				else if (annotationName.equals(ANNOTATION_BEAN)
+						&& UmlGeneratorUtility.isIncluded(method.getParameterTypes()[0].getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
+					classModel.addDepedency(packagesIncluded ? method.getParameterTypes()[0].getName() : method.getReturnType().getSimpleName(), DependencyType.BEAN);
+					hasSpringDependency = true;
+				}
+			}
+			
+			if (methodsVisible && !hasSpringDependency && !method.isSynthetic() && !method.isBridge()) {
+				classModel.addMethod(new MethodModel(method.getName(), method.getModifiers()));
+			}
+		}
+	}
+	
+	private static void extractConstructorDependencies(boolean packagesIncluded, Class<?> loadClass, SpringClassModel classModel, boolean hasAnyPatterns, String[] includePatterns, String[] excludePatterns) {
+		for (Constructor constructor : loadClass.getDeclaredConstructors()) {
+			for (Annotation annotation : constructor.getAnnotations()) {
+				String annotationName = annotation.annotationType().getName();
+				if (annotationName.equals(ANNOTATION_AUTOWIRED)) {
+					extractConstructorParameterDependecies(packagesIncluded, classModel,
+							hasAnyPatterns, includePatterns, excludePatterns, constructor, DependencyType.AUTOWIRED);
+				}
+				else if (annotationName.equals(ANNOTATION_REQUIRED)) {
+					extractConstructorParameterDependecies(packagesIncluded, classModel,
+							hasAnyPatterns, includePatterns, excludePatterns, constructor, DependencyType.REQUIRED);
+				}
+				else if (annotationName.equals(ANNOTATION_BEAN)) {
+					extractConstructorParameterDependecies(packagesIncluded, classModel,
+							hasAnyPatterns, includePatterns, excludePatterns, constructor, DependencyType.BEAN);
 				}
 			}
 		}
 	}
 
+	protected static void extractConstructorParameterDependecies(boolean packagesIncluded, SpringClassModel classModel,	boolean hasAnyPatterns,
+			String[] includePatterns, String[] excludePatterns, Constructor constructor, DependencyType type) {
+		for (Class argumentType : constructor.getParameterTypes()) {
+			if (UmlGeneratorUtility.isIncluded(argumentType.getName(), hasAnyPatterns, includePatterns, excludePatterns)) {
+				classModel.addDepedency(packagesIncluded ? argumentType.getName() : argumentType.getSimpleName(), type);
+			}
+		}
+	}
+	
 	private static void extractFields(List<String> classes, boolean packagesIncluded,
 			boolean fieldsVisible, Class<?> loadClass, SpringClassModel classModel,
 			boolean hasAnyPatterns, String[] includePatterns, String[] excludePatterns) {

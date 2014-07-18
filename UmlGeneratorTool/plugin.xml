@@ -53,11 +53,11 @@
                class="umlGenerator.actions.GenerateSpringClassDiagramAction"
                icon="icons/SpringIcon.png"
                id="UmlGeneratorTool.generateSpringClassDiagram"
-               label="Generate Spring Class Diagram"
+               label="Generate Spring Dependency Diagram"
                menubarPath="toolsMenu/toolsGroup"
                state="false"
                style="push"
-               tooltip="Generate Spring Class Diagram for the selected project.">
+               tooltip="Generate Spring Dependency Diagram for the selected project.">
          </action>
       </objectContribution>
 
