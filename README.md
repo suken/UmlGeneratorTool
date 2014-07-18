@@ -10,7 +10,7 @@ UML Generator provides APIs for generating UML diagrams from java source. The UM
 
 The library supports following UML diagrams:
 
-<h2>Class Diagram</h2>
+<h3>Class Diagram</h3>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/ClassDiagramIcon.png)
 The class diagram generates the followings:<br>
 <ul>
@@ -20,9 +20,9 @@ The class diagram generates the followings:<br>
   <li>Implemented interfaces
   <li>Composite class dependencies
 </ul>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleClassDiagram.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/SampleClassDiagram.png)
 
-<h2> Spring Dependency Diagram </h2>
+<h3> Spring Dependency Diagram </h3>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/SpringIcon.png)
 In addition to plain class diagram, the spring class diagram also generates followings:
 <ul>
@@ -37,14 +37,34 @@ In addition to plain class diagram, the spring class diagram also generates foll
   <li> Configuration classes
   <li> Additional comments are provided for class level annotations.
 </ul>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleSpringDependencyDiagram.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/SampleSpringDependencyDiagram.png)
 
 
-<h2>Component Diagram (Maven)</h2>
+<h3>Component Diagram (Maven)</h3>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/ComponentDiagramIcon.png)
 The method recursively inspects the given source directory to parse all POM files. <br>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleComponentDiagram.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/SampleComponentDiagram.png)
 
 <br>
 <b> Warning </b><br>
 If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
+
+UmlGeneratorTool
+==================
+The UmlGeneratorTool is an Eclipse plugin to allow developers to generate UML diagrams from eclipse projects. The Eclipse plugin is compatible with Eclipse 3.5+ distributions. If you are using older version of Eclipse than God Bless You ;)
+
+<h3> Installation Guilde </h3>
+Under construction. I am still setting up the maven repository for the two UML projects. Its too early for me to start releasing versions officially.
+But if you really feel like trying the tool out then simply import UmlGeneratorTool project in you eclipse and then export it as "Deployable plug-ins and fragments" into your eclipse plugin directory.
+
+<h3> How to Generate UML diagrams </h3>
+All the available UML diagrams can be generated from project contextual menu. Here is a screen shot:<br>
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/UmlGeneratorMenu.png)
+
+Each diagram has its own options for UML generation. Please refer to the following:<br>
+
+<b>Class Diagram and Spring Depedency Diagram</b><br>
+<img align="center" src="https://github.com/suken/UmlGeneratorTool/blob/master/Resources/ClassAndSpringDiagramOptionsDialog.png"/>
+
+<b>Component Diagram </b><br>
+<img align="center" src="https://github.com/suken/UmlGeneratorTool/blob/master/Resources/ComponentDiagramOptionsDialog.png"/>
