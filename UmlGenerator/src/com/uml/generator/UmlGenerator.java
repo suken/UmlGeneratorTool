@@ -118,8 +118,8 @@ public class UmlGenerator {
 			String uml = SpringDependencyDiagramGenerator.generateSpringDependencies(classLoader, projectJarUrl, packagesIncluded, fieldsIncluded, methodsIncluded, testIncluded, includePatterns, excludePatterns).replace("$", "_Inner");
 			
 			// generate the UML and plant uml text files
-			exportToPlantUMLFile(projectName, umlDirPath, uml, "_SpringClassDiagram");
-			exportToPngFile(projectName, umlDirPath, uml, "_SpringClassDiagram");
+			exportToPlantUMLFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram");
+			exportToPngFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram");
 		}
 		finally {
 			Thread.currentThread().setContextClassLoader(loader);
