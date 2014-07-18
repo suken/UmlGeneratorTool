@@ -11,7 +11,7 @@ UML Generator provides APIs for generating UML diagrams from java source. The UM
 The library supports following UML diagrams:
 
 <h2>Class Diagram</h2>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/tree/master/UmlGeneratorTool/icons/ClassDiagramIcon.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/ClassDiagramIcon.png)
 The class diagram generates the followings:<br>
 <ul>
   <li>Fields if {@code fieldsIncluded} set to TRUE
@@ -23,7 +23,7 @@ The class diagram generates the followings:<br>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleClassDiagram.png)
 
 <h2> Spring Dependency Diagram </h2>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/tree/master/UmlGeneratorTool/icons/SpringIcon.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/SpringIcon.png)
 In addition to plain class diagram, the spring class diagram also generates followings:
 <ul>
   <li> Autowired depedencies
@@ -37,11 +37,11 @@ In addition to plain class diagram, the spring class diagram also generates foll
   <li> Configuration classes
   <li> Additional comments are provided for class level annotations.
 </ul>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleSpringDepedencyDiagram.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleSpringDependencyDiagram.png)
 
 
 <h2>Component Diagram (Maven)</h2>
-![ScreenShot](https://github.com/suken/UmlGeneratorTool/tree/master/UmlGeneratorTool/icons/ComponentDiagramIcon.png)
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/ComponentDiagramIcon.png)
 The method recursively inspects the given source directory to parse all POM files. <br>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGenerator/samples/SampleComponentDiagram.png)
 
