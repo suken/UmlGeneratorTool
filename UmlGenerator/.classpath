@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/plantuml.jar"/>
+	<classpathentry kind="lib" path="lib/maven-aether-provider-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-artifact-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-compat-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-core-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-embedder-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-model-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-model-builder-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-plugin-api-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-repository-metadata-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-settings-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/maven-settings-builder-3.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/plexus-utils-2.0.6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
