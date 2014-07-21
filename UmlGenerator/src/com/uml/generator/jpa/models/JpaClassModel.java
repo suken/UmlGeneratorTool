@@ -19,8 +19,9 @@ import com.uml.generator.spring.models.DependencyType;
  */
 public class JpaClassModel extends ClassModel {
 	
-	private static final String TABEL = " << (C,#BB3255) TABLE >> ";
-	private static final String MAPPED_SUPER_CLASS = " << (C,#FF0041) MAPPED SUPER CLASS >> ";
+	private static final String TABEL = " << (T,#BB3255) TABLE >> ";
+	private static final String MAPPED_SUPER_CLASS = " << (M,#CD45FF) MAPPED SUPER CLASS >> ";
+	private static final String ENTITY_CLASS = " << (E,#ACFFFF) ENTITY >> ";
 
 	private String tableName;
 	private JpaEntityType jpaType;
@@ -69,12 +70,18 @@ public class JpaClassModel extends ClassModel {
 		case MAPPED_SUPER_CLASS:
 			uml.append(MAPPED_SUPER_CLASS);
 			break;
-		case NONE:
+		case ENTITY:
+			uml.append(ENTITY_CLASS);
 		default:
 			break;
 		}
 		
 		uml.append(OPEN_PARENTHESIS).append(NEW_LINE);
+		
+		// add table name
+		if (tableName != null) {
+			uml.append("__ID COLUMNS__").append(NEW_LINE).append(tableName).append(NEW_LINE);
+		}
 		
 		// all columns
 		getColumnsUml(uml);

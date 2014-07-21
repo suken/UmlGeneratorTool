@@ -120,6 +120,7 @@ public class JpaMappingDiagramGenerator {
 	@SuppressWarnings("finally")
 	private static void extractJpaClassAnnotations(Class<?> loadClass, JpaClassModel classModel) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		classModel.setType(loadClass);
+		classModel.setJpaEntityType(JpaEntityType.ENTITY);
 		for (Annotation annotation : loadClass.getAnnotations()) {
 			Class<? extends Annotation> annotationType = annotation.annotationType();
 			if (ANNOTATION_MAPPED_SUPER_CLASS.equals(annotationType.getName())) {
@@ -131,12 +132,12 @@ public class JpaMappingDiagramGenerator {
 				classModel.setTableName(String.valueOf(annotationType.getDeclaredMethod("name").invoke(annotation, (Object[])null)));
 			}
 			else {
-				extractAnnotatiuonNotes(classModel, annotation, annotationType);
+//				extractAnnotationNotes(classModel, annotation, annotationType);
 			}
 		}
 	}
 
-	protected static void extractAnnotatiuonNotes(JpaClassModel classModel,
+	protected static void extractAnnotationNotes(JpaClassModel classModel,
 			Annotation annotation, Class<? extends Annotation> annotationType) {
 		// adding other annotations as note
 		StringBuffer note = new StringBuffer();
