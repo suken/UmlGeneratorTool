@@ -61,9 +61,9 @@ Following is the sample generated JPA mapping diagram.
 The method recursively inspects the given source directory to parse all POM files. <br>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/SampleComponentDiagram.png)
 
-<br>
-<b> Warning </b><br>
-If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
+
+<h4> Warning </h4>
+If the UML diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
 
 
 UmlGeneratorTool
