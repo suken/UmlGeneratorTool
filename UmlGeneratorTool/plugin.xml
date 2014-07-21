@@ -60,6 +60,23 @@
                tooltip="Generate Spring Dependency Diagram for the selected project.">
          </action>
       </objectContribution>
+      
+      <!-- JPA MAPPING DIAGRAM -->
+      <objectContribution
+            id="UmlGeneratorTool.umlTools"
+ 	  	    adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"> 
+         <action
+               class="umlGenerator.actions.GenerateJpaMappingDiagramAction"
+               icon="icons/JPAIcon.png"
+               id="UmlGeneratorTool.generateJpaMappingDiagram"
+               label="Generate JPA Mapping Diagram"
+               menubarPath="toolsMenu/toolsGroup"
+               state="false"
+               style="push"
+               tooltip="Generate JPA Mapping Diagram for the selected project.">
+         </action>
+      </objectContribution>
 
    </extension>
 

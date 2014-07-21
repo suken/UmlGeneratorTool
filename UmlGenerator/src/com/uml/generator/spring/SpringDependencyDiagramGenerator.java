@@ -17,6 +17,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import com.uml.generator.UmlGeneratorUtility;
+import com.uml.generator.UmlOptions;
 import com.uml.generator.classDiagram.models.ClassType;
 import com.uml.generator.classDiagram.models.FieldModel;
 import com.uml.generator.classDiagram.models.MethodModel;
@@ -43,7 +44,7 @@ public class SpringDependencyDiagramGenerator {
 	private static final String ANNOTATION_AUTOWIRED = "org.springframework.beans.factory.annotation.Autowired";
 	private static final String ANNOTATION_STR = "@";
 
-	public static String generateSpringDependencies(URLClassLoader classLoader, URL jarUrl, boolean packagesIncluded, boolean fieldsVisible, boolean methodsVisible, boolean testIncluded, String includePatterns, String excludePatterns) {
+	public static String generateSpringDependencies(URLClassLoader classLoader, URL jarUrl, UmlOptions options) {
 		SpringDependencyDiagramModel dependencyModel = new SpringDependencyDiagramModel();
 		try {
 			List<String> classes = new ArrayList<String>();
@@ -54,7 +55,7 @@ public class SpringDependencyDiagramGenerator {
 					JarEntry jarEntry = entries.nextElement();
 					String jarEntryName = jarEntry.getName();
 					if (jarEntryName.endsWith(".class")
-							&& (testIncluded || !jarEntryName.contains("Test"))) {
+							&& (options.isTestIncluded() || !jarEntryName.contains("Test"))) {
 						String className = jarEntryName.replace('/', '.').replace(".class", "");
 						classes.add(className);
 					}
@@ -63,7 +64,7 @@ public class SpringDependencyDiagramGenerator {
 			}
 
 			// Parse all the classes for UML
-			extractClassInformation(classLoader, classes, dependencyModel, packagesIncluded, fieldsVisible, methodsVisible, includePatterns, excludePatterns);
+			extractClassInformation(classLoader, classes, dependencyModel, options.isPackagesIncluded(), options.isFieldsIncluded(), options.isMethodsIncluded(), options.getIncludePatterns(), options.getExcludePatterns());
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -26,14 +26,8 @@ import umlGenerator.MultipleProjectAction;
 import umlGenerator.windows.GenerateUMLOptionsDialog;
 
 import com.uml.generator.UmlGenerator;
+import com.uml.generator.UmlOptions;
 
-/**
- * Action implementing the deploy project functionality.
- * <p>
- * This action will deploy the selected projects to the correct location under REF_JHMI.
- * If the deploy location of the project cannot be determined an error will be displayed
- * to the user.
- */
 public class GenerateSpringClassDiagramAction extends MultipleProjectAction {
 	
 	/**
@@ -53,7 +47,7 @@ public class GenerateSpringClassDiagramAction extends MultipleProjectAction {
 	}
 
 	/**
-	 * Deploy a project to it's deployed location under REF_JHMI.
+	 * Deploy a project to it's deployed location.
 	 * 
 	 * @param javaProject
 	 *            The project to deploy
@@ -106,10 +100,14 @@ public class GenerateSpringClassDiagramAction extends MultipleProjectAction {
 					}
 					
 					progress.subTask("Generating Spring class diagram.");
-					UmlGenerator.generateSpringClassDiagram(urls.get(0), urls.toArray(new URL[] {}),
-							dialog.arePackagesIncluded(), dialog.areFieldsIncluded(), dialog.areMethodsIncluded(), dialog.areTestsIncluded(),
-							project.getName(), project.getFolder("uml").getLocation().toFile().getPath(),
-							dialog.getIncludePattern(), dialog.getExcludePatterns());
+					UmlOptions options = new UmlOptions();
+					options.setPackagesIncluded(dialog.arePackagesIncluded());
+					options.setTestIncluded(dialog.areTestsIncluded());
+					options.setFieldsIncluded(dialog.areFieldsIncluded());
+					options.setMethodsIncluded(dialog.areMethodsIncluded());
+					options.setIncludePatterns(dialog.getIncludePattern());
+					options.setExcludePatterns(dialog.getExcludePatterns());
+					UmlGenerator.generateSpringClassDiagram(urls.get(0), urls.toArray(new URL[] {}), project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
 					progress.worked(40);
 					LOGGER.log(Level.ALL, "Finished generation of spring class diagram for project : " + project.getName());
 				}

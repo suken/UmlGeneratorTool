@@ -21,14 +21,8 @@ import umlGenerator.MultipleProjectAction;
 import umlGenerator.windows.GenerateComponentDiagramOptionsDialog;
 
 import com.uml.generator.UmlGenerator;
+import com.uml.generator.UmlOptions;
 
-/**
- * Action implementing the deploy project functionality.
- * <p>
- * This action will deploy the selected projects to the correct location under REF_JHMI.
- * If the deploy location of the project cannot be determined an error will be displayed
- * to the user.
- */
 public class GenerateComponentDiagramAction extends MultipleProjectAction {
 	
 	/**
@@ -85,11 +79,11 @@ public class GenerateComponentDiagramAction extends MultipleProjectAction {
 
 				try {
 					progress.subTask("Generating Component Diagram.");
+					UmlOptions options = new UmlOptions();
+					options.setIncludePatterns(dialog.getIncludePattern());
+					options.setExcludePatterns(dialog.getExcludePatterns());
 					UmlGenerator.generateComponentDiagram(project.getLocation().toFile().getPath(),
-							project.getName(),
-							dialog.getIncludePattern(),
-							dialog.getExcludePatterns(),
-							project.getFolder("uml").getLocation().toFile().getPath());
+							project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
 					progress.worked(80);
 					LOGGER.log(Level.ALL, "Finished generation of component diagram for project : " + project.getName());
 				}

@@ -23,14 +23,17 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 
 import umlGenerator.MultipleProjectAction;
-import umlGenerator.windows.GenerateUMLOptionsDialog;
+import umlGenerator.windows.GenerateComponentDiagramOptionsDialog;
 
 import com.uml.generator.UmlGenerator;
 import com.uml.generator.UmlOptions;
 
-public class GenerateClassDiagramAction extends MultipleProjectAction {
+public class GenerateJpaMappingDiagramAction extends MultipleProjectAction {
 	
-	private static final Logger LOGGER = Logger.getLogger("GenerateClassDiagramAction");
+	/**
+	 * Logger.
+	 */
+	private static final Logger LOGGER = Logger.getLogger("GenerateJpaMappingDiagramAction");
 	
 	/**
 	 * {@inheritDoc}
@@ -44,8 +47,6 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 	}
 
 	/**
-	 * Deploy a project to it's deployed location under REF_JHMI.
-	 * 
 	 * @param javaProject
 	 *            The project to deploy
 	 * @param shell
@@ -58,36 +59,35 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 	 */
 	@Override
 	protected void generateUml(final IProject project, final Shell shell) throws CoreException, MalformedURLException {
-		LOGGER.log(Level.INFO, "Starting generation of class diagram for project : " + project.getName());
+		LOGGER.log(Level.ALL, "Starting generation of JPA mapping diagram for project : " + project.getName());
 		
 		// create a job such that the long running process can run in background.
-		Job generateJob = new Job("Class Diagram Job") {
+		Job generationJob = new Job("Generation of JPA mapping diagram") {
 			
 			@Override
 			protected IStatus run(IProgressMonitor progress) {
 				boolean success = true;
 				String reason = "";
-				
-				progress.beginTask("Starting the task.", 100);
-				progress.subTask("Getting user UML generation options.");
+				progress.beginTask("Starting generation of JPA mapping diagram.", 100);
 				
 				// get user options for uml generation
-				final GenerateUMLOptionsDialog dialog = new GenerateUMLOptionsDialog(shell);
+				progress.subTask("Get user options.");
+				final GenerateComponentDiagramOptionsDialog dialog = new GenerateComponentDiagramOptionsDialog(shell);
 				// create sync execution to make sure that the UI updates are performed in main UI thread.
 				Display.getDefault().syncExec(new Runnable() {
 					public void run() {
 						dialog.open();
 					}
 				});
-				IJavaProject javaProject = JavaCore.create(project);
 				progress.worked(10);
-				
+
 				try {
-					progress.subTask("Exporting project " + project.getName() + " to jar file.");
-					final IPath deployedJarFile = exportProjectJar(project, shell);
+					IJavaProject javaProject = JavaCore.create(project);
+					progress.subTask("Export the project " + project.getName() + " jar file.");
+					IPath deployedJarFile = exportProjectJar(project, shell);
 					progress.worked(40);
 					
-					progress.subTask("Extracting dependent jars for " + project.getName());
+					progress.subTask("Extracting dependent jars for project " + project.getName());
 					List<URL> urls = getDepedentJars(project, javaProject, javaProject.getRawClasspath(), deployedJarFile);
 					progress.worked(10);
 					
@@ -97,20 +97,16 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 						umlDir.mkdir();
 					}
 					
-					progress.subTask("Generating class diagram for " + project.getName());
+					progress.subTask("Generating JPA mapping diagram.");
 					UmlOptions options = new UmlOptions();
-					options.setPackagesIncluded(dialog.arePackagesIncluded());
-					options.setTestIncluded(dialog.areTestsIncluded());
-					options.setFieldsIncluded(dialog.areFieldsIncluded());
-					options.setMethodsIncluded(dialog.areMethodsIncluded());
 					options.setIncludePatterns(dialog.getIncludePattern());
 					options.setExcludePatterns(dialog.getExcludePatterns());
-					UmlGenerator.generateClassDiagram(urls.get(0), urls.toArray(new URL[] {}), project.getName(), umlDir.getPath(), options);
-					LOGGER.log(Level.INFO, "Finished generation of class diagram for project : " + project.getName());
+					UmlGenerator.generateJPAMappingDiagram(urls.get(0), urls.toArray(new URL[] {}),
+							project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
 					progress.worked(40);
+					LOGGER.log(Level.ALL, "Finished generation of JPA mapping diagram for project : " + project.getName());
 				}
 				catch (Exception e) {
-					// capture exception and show it to user
 					e.printStackTrace();
 					reason = ExceptionUtils.getStackTrace(e);
 					success = false;
@@ -119,9 +115,9 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 				showResultDialog(shell, project.getName(), success, reason);
 				return Status.OK_STATUS;
 			}
-		};
-		generateJob.setPriority(Job.SHORT);
-		generateJob.schedule();
+		}; 
+		generationJob.setPriority(Job.SHORT);
+		generationJob.schedule();
 	}
 
 }

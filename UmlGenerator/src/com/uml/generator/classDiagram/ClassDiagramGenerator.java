@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.uml.generator.UmlGeneratorUtility;
+import com.uml.generator.UmlOptions;
 import com.uml.generator.classDiagram.models.ClassDiagramModel;
 import com.uml.generator.classDiagram.models.ClassModel;
 import com.uml.generator.classDiagram.models.ClassType;
@@ -29,7 +30,7 @@ public class ClassDiagramGenerator {
 	
 	private static Logger LOGGER = Logger.getLogger("ClassDiagramGenerator");
 
-	public static ClassDiagramModel generateClassDependencies(URLClassLoader classLoader, URL jarUrl,  boolean packagesIncluded, boolean fieldsVisible, boolean methodsVisible, boolean testIncluded, String includePatterns, String excludePatterns) throws Exception {
+	public static ClassDiagramModel generateClassDependencies(URLClassLoader classLoader, URL jarUrl,  UmlOptions options) throws Exception {
 		ClassDiagramModel classDiagramModel = new ClassDiagramModel();
 		LOGGER.log(Level.INFO, "Loading classes");
 		JarFile jarFile = null;
@@ -43,7 +44,7 @@ public class ClassDiagramGenerator {
 					String jarEntryName = jarEntry.getName();
 					// exclude test classes if testIncluded is set to FALSE
 					if (jarEntryName.endsWith(".class")
-							&& (testIncluded || !jarEntryName.contains("Test"))) {
+							&& (options.isTestIncluded() || !jarEntryName.contains("Test"))) {
 						String className = jarEntryName.replace('/', '.').replace(".class", "");
 						classes.add(className);
 					}
@@ -51,7 +52,7 @@ public class ClassDiagramGenerator {
 			}
 
 			// Parse all the classes for UML
-			extractClassInformation(classLoader, classes, classDiagramModel, packagesIncluded, fieldsVisible, methodsVisible, includePatterns, excludePatterns);
+			extractClassInformation(classLoader, classes, classDiagramModel, options.isPackagesIncluded(), options.isFieldsIncluded(), options.isMethodsIncluded(), options.getIncludePatterns(), options.getExcludePatterns());
 
 		} catch (Exception e) {
 			e.printStackTrace();

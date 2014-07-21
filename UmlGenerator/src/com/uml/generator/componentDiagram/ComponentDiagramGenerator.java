@@ -20,6 +20,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
+import com.uml.generator.UmlOptions;
 import com.uml.generator.componentDiagram.models.ComponentDiagramModel;
 import com.uml.generator.componentDiagram.models.ComponentModel;
 import com.uml.generator.componentDiagram.models.ComponentType;
@@ -29,11 +30,11 @@ import com.uml.generator.componentDiagram.models.ComponentType;
  */
 public class ComponentDiagramGenerator {
 
-	public static String generateComponentDiagram(String srcDir, String includePatterns, String excludePatterns) throws FileNotFoundException, IOException, XmlPullParserException {
+	public static String generateComponentDiagram(String srcDir, UmlOptions options) throws FileNotFoundException, IOException, XmlPullParserException {
 		String uml = "";
 		// extract all POM files from the source dir
 		List<File> pomFiles = getAllPOMFiles(new File(srcDir));
-		uml = processPomFiles(pomFiles, includePatterns, excludePatterns);
+		uml = processPomFiles(pomFiles, options.getIncludePatterns(), options.getExcludePatterns());
 		return uml;
 	}
 
