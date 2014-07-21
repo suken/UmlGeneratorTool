@@ -40,6 +40,22 @@ In addition to plain class diagram, the spring class diagram also generates foll
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/SampleSpringDependencyDiagram.png)
 
 
+
+<h3> JPA Mapping diagram</h3>
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/JPAIcon.png)
+The JPA mapping diagram utility can be used to identify the relationship between persistent classes. The utility generates the following:
+<ul>
+  <li> Persistent entity types (ENTITY, TABLE or MAPPED SUPER CLASSES)
+  <li> Inheritance of persistent entities.
+  <li> Mapped relationships (OntToOne, ManyToOne, OneToMany)
+  <li> Database table name
+  <li> Mapped database columns
+  <li> Identifier columns
+</ul>
+Following is the sample generated JPA mapping diagram.
+![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/Resources/SampleJPAMappingDiagram.png)
+
+
 <h3>Component Diagram (Maven)</h3>
 ![ScreenShot](https://github.com/suken/UmlGeneratorTool/blob/master/UmlGeneratorTool/icons/ComponentDiagramIcon.png)
 The method recursively inspects the given source directory to parse all POM files. <br>
@@ -48,6 +64,7 @@ The method recursively inspects the given source directory to parse all POM file
 <br>
 <b> Warning </b><br>
 If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
+
 
 UmlGeneratorTool
 ==================
@@ -66,5 +83,5 @@ Each diagram has its own options for UML generation. Please refer to the followi
 <b>Class Diagram and Spring Depedency Diagram</b><br>
 <img align="center" src="https://github.com/suken/UmlGeneratorTool/blob/master/Resources/ClassAndSpringDiagramOptionsDialog.png"/>
 
-<b>Component Diagram </b><br>
+<b>Component Diagram and JPA Mapping diagram</b><br>
 <img align="center" src="https://github.com/suken/UmlGeneratorTool/blob/master/Resources/ComponentDiagramOptionsDialog.png"/>
