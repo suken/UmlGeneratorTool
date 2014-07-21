@@ -11,8 +11,6 @@ import java.util.Map.Entry;
 
 import com.uml.generator.classDiagram.models.ClassModel;
 import com.uml.generator.classDiagram.models.ClassType;
-import com.uml.generator.classDiagram.models.FieldModel;
-import com.uml.generator.spring.models.DependencyType;
 
 /**
  * @author SShah
