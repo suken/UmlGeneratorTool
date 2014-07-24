@@ -11,8 +11,6 @@ import java.util.Map.Entry;
 
 import com.uml.generator.classDiagram.models.ClassModel;
 import com.uml.generator.classDiagram.models.ClassType;
-import com.uml.generator.classDiagram.models.FieldModel;
-import com.uml.generator.spring.models.DependencyType;
 
 /**
  * @author SShah
@@ -22,12 +20,16 @@ public class JpaClassModel extends ClassModel {
 	private static final String TABEL = " << (T,#BB3255) TABLE >> ";
 	private static final String MAPPED_SUPER_CLASS = " << (M,#CD45FF) MAPPED SUPER CLASS >> ";
 	private static final String ENTITY_CLASS = " << (E,#ACFFFF) ENTITY >> ";
+	private static final String COLUMNS_SEPARATOR = "__COLUMNS__";
+	private static final String ID_COLUMNS_SEPARATOR ="__ID COLUMNS__";
+	private static final String TABLE_NAME_SEPARATOR = "__TABLE__";
+	private static final String ONE_TO_ONE_UML_STR = "--";
 
 	private String tableName;
 	private JpaEntityType jpaType;
-	private Map<String, JpaDependencyType> jpaDependencies = new HashMap<String, JpaDependencyType>();
-	private List<String> columns = new ArrayList<String>();
-	private List<String> idColumns = new ArrayList<String>();
+	private Map<String, JpaDependencyType> jpaDependencies = new HashMap<String, JpaDependencyType>(5);
+	private List<String> columns = new ArrayList<String>(5);
+	private List<String> idColumns = new ArrayList<String>(5);
 	private StringBuffer note = new StringBuffer();
 
 	public JpaClassModel(String name) {
@@ -44,6 +46,10 @@ public class JpaClassModel extends ClassModel {
 	
 	public void addJpaDependency(String className, JpaDependencyType type) {
 		jpaDependencies.put(className, type);
+	}
+	
+	public void removeJpaDependency(String className) {
+		jpaDependencies.remove(className);
 	}
 	
 	public void addColumn(String columnName) {
@@ -80,7 +86,7 @@ public class JpaClassModel extends ClassModel {
 		
 		// add table name
 		if (tableName != null) {
-			uml.append("__ID COLUMNS__").append(NEW_LINE).append(tableName).append(NEW_LINE);
+			uml.append(TABLE_NAME_SEPARATOR).append(NEW_LINE).append(tableName).append(NEW_LINE);
 		}
 		
 		// all columns
@@ -98,18 +104,26 @@ public class JpaClassModel extends ClassModel {
 		// parent relationship
 		getDepenciesUml(uml);
 		
-		// spring dependencies
-		for (Entry<String, JpaDependencyType>  dependency : jpaDependencies.entrySet()) {
-			uml.append(NEW_LINE).append(getName()).append(DEPENDS).append(dependency.getKey()).append(" : ").append(dependency.getValue().toString()).append(" ");
-		}
+		getJpaDependenciesUml(uml);
 		
 		uml.append(NEW_LINE);
 		return uml.toString();
 	}
 	
+	private void getJpaDependenciesUml(StringBuffer uml) {
+		for (Entry<String, JpaDependencyType>  dependency : jpaDependencies.entrySet()) {
+			String dependsUmlString = DEPENDS;
+			if (dependency.getValue() == JpaDependencyType.ONE_TO_ONE
+					|| dependency.getValue() == JpaDependencyType.MANY_TO_MANY) {
+				dependsUmlString = ONE_TO_ONE_UML_STR;
+			}
+			uml.append(NEW_LINE).append(getName()).append(dependsUmlString).append(dependency.getKey()).append(" : ").append(dependency.getValue().toString()).append(" ");
+		}
+	}
+
 	protected void getColumnsUml(StringBuffer uml) {
 		if (!idColumns.isEmpty()) {
-			uml.append("__ID COLUMNS__").append(NEW_LINE);
+			uml.append(ID_COLUMNS_SEPARATOR).append(NEW_LINE);
 			// all id columns
 			for (String column : idColumns) {
 				uml.append(column);
@@ -118,7 +132,7 @@ public class JpaClassModel extends ClassModel {
 		}
 		
 		if (!columns.isEmpty()) {
-			uml.append("__COLUMNS__").append(NEW_LINE);
+			uml.append(COLUMNS_SEPARATOR).append(NEW_LINE);
 			// all non-id columns
 			for (String column : columns) {
 				uml.append(column);

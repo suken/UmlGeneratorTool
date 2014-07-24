@@ -17,10 +17,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
 
 import umlGenerator.MultipleProjectAction;
 import umlGenerator.windows.GenerateComponentDiagramOptionsDialog;
@@ -35,17 +33,6 @@ public class GenerateJpaMappingDiagramAction extends MultipleProjectAction {
 	 */
 	private static final Logger LOGGER = Logger.getLogger("GenerateJpaMappingDiagramAction");
 	
-	/**
-	 * {@inheritDoc}
-	 */
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
-	
-	@Override
-	protected String getNatureId() {
-		return JavaCore.NATURE_ID;
-	}
-
 	/**
 	 * @param javaProject
 	 *            The project to deploy

@@ -37,17 +37,12 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 	 */
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 	}
-	
-	@Override
-	protected String getNatureId() {
-		return JavaCore.NATURE_ID;
-	}
 
 	/**
-	 * Deploy a project to it's deployed location under REF_JHMI.
+	 * Generate UML diagram for the given project.
 	 * 
 	 * @param javaProject
-	 *            The project to deploy
+	 *            The project for which the UML is to be generated.
 	 * @param shell
 	 *            The current shell used to display progress monitors.
 	 * @throws CoreException

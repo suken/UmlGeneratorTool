@@ -11,11 +11,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
 
 import umlGenerator.MultipleProjectAction;
 import umlGenerator.windows.GenerateComponentDiagramOptionsDialog;
@@ -31,21 +28,10 @@ public class GenerateComponentDiagramAction extends MultipleProjectAction {
 	private static final Logger LOGGER = Logger.getLogger("GenerateComponentDiagramAction");
 	
 	/**
-	 * {@inheritDoc}
-	 */
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
-	
-	@Override
-	protected String getNatureId() {
-		return JavaCore.NATURE_ID;
-	}
-
-	/**
-	 * Deploy a project to it's deployed location under REF_JHMI.
+	 * Generate UML for the given java project.
 	 * 
 	 * @param javaProject
-	 *            The project to deploy
+	 *            the project for which the UML is to be generated.
 	 * @param shell
 	 *            The current shell used to display progress monitors.
 	 * @throws CoreException

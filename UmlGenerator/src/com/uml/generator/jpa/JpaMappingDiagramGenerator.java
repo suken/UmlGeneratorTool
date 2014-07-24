@@ -12,9 +12,10 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -41,7 +42,7 @@ public class JpaMappingDiagramGenerator {
 	private static final String ANNOTATION_MANY_TO_ONE = "javax.persistence.ManyToOne";
 	private static final String ANNOTATION_ONE_TO_MANY = "javax.persistence.OneToMany";
 	private static final String ANNOTATION_ONE_TO_ONE = "javax.persistence.OneToOne";
-	private static final String ANNOTATION_STR = "@";
+	private static final String ANNOTATION_MANY_TO_MANY = "javax.persistence.ManyToMany";
 
 	public static String generateJpaDependencies(URLClassLoader classLoader, URL jarUrl, UmlOptions options) {
 		JpaDependencyDiagramModel dependencyModel = new JpaDependencyDiagramModel();
@@ -74,6 +75,7 @@ public class JpaMappingDiagramGenerator {
 		String[] includePatterns = includePatternString.split(",");
 		String[] excludePatterns = excludePatternString.split(",");
 		boolean hasAnyPatterns = !(includePatterns.length == 1 && includePatterns[0].isEmpty()) ||  !(excludePatterns.length == 1 && excludePatterns[0].isEmpty());
+		Map<String, Map<String, JpaDependencyType>> jpaDependencyCache = new HashMap<String, Map<String, JpaDependencyType>>();
 		for (String className : classes) {
 			if (UmlGeneratorUtility.isIncluded(className, hasAnyPatterns, includePatterns, excludePatterns)) {
 				Class<?> loadClass = classLoader.loadClass(className);
@@ -87,7 +89,7 @@ public class JpaMappingDiagramGenerator {
 					extractJpaClassAnnotations(loadClass, classModel);
 
 					// extract fields
-					extractColumnsAndEntityDependencies(classes, loadClass, classModel, hasAnyPatterns, includePatterns, excludePatterns);
+					extractColumnsAndEntityDependencies(dependencyModel, loadClass, classModel, jpaDependencyCache, hasAnyPatterns, includePatterns, excludePatterns);
 					
 					// extract interfaces
 					extractInterfaces(loadClass, classModel, hasAnyPatterns, includePatterns, excludePatterns);
@@ -117,7 +119,6 @@ public class JpaMappingDiagramGenerator {
 		return false;
 	}
 
-	@SuppressWarnings("finally")
 	private static void extractJpaClassAnnotations(Class<?> loadClass, JpaClassModel classModel) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		classModel.setType(loadClass);
 		classModel.setJpaEntityType(JpaEntityType.ENTITY);
@@ -131,49 +132,7 @@ public class JpaMappingDiagramGenerator {
 				// extract the table name
 				classModel.setTableName(String.valueOf(annotationType.getDeclaredMethod("name").invoke(annotation, (Object[])null)));
 			}
-			else {
-//				extractAnnotationNotes(classModel, annotation, annotationType);
-			}
 		}
-	}
-
-	protected static void extractAnnotationNotes(JpaClassModel classModel,
-			Annotation annotation, Class<? extends Annotation> annotationType) {
-		// adding other annotations as note
-		StringBuffer note = new StringBuffer();
-		note.append(ANNOTATION_STR + annotationType.getSimpleName()).append(" ( \\n");
-		boolean hasAnyAttributes = false;
-		for (Method method : annotationType.getDeclaredMethods()) {
-			try {
-				Object defaultValue = method.getDefaultValue();
-				Object value = method.invoke(annotation, (Object[])null);
-				if (value != null && !value.equals(defaultValue)) {
-					String stringValue = String.valueOf(value);
-					if (method.getReturnType().isArray() && ((Object[]) value).length > 0) {
-						stringValue = Arrays.toString((Object[])value);
-						stringValue = stringValue.substring(1, stringValue.length() - 1);
-					}
-					if (!stringValue.startsWith("[L")) {
-						note.append(" ").append(method.getName()).append(" = ").append(stringValue).append("\\n");
-						hasAnyAttributes = true;
-					}
-				}
-			} catch (Exception e) {
-				// no need to do anything
-			}
-			finally {
-				continue;
-			}
-		}
-		
-		if (hasAnyAttributes) {
-			note.append(") \\n");
-		}
-		else {
-			int startIndex = note.indexOf(" ( \\n");
-			note.delete(startIndex, startIndex + 5);
-		}
-		classModel.addNote(note.toString());
 	}
 
 	private static void extractInterfaces(Class<?> loadClass, JpaClassModel classModel, boolean hasAnyPatterns, String[] includePatterns, String[] excludePatterns) {
@@ -184,7 +143,7 @@ public class JpaMappingDiagramGenerator {
 		}
 	}
 
-	private static void extractColumnsAndEntityDependencies(List<String> classes, Class<?> loadClass, JpaClassModel classModel, boolean hasAnyPatterns, String[] includePatterns, String[] excludePatterns) {
+	private static void extractColumnsAndEntityDependencies(JpaDependencyDiagramModel dependencyModel, Class<?> loadClass, JpaClassModel classModel, Map<String, Map<String, JpaDependencyType>> jpaDependencyCache, boolean hasAnyPatterns, String[] includePatterns, String[] excludePatterns) {
 		for (Field field : loadClass.getDeclaredFields()) {
 			try {
 				Class<?> fieldType = field.getType();
@@ -198,15 +157,18 @@ public class JpaMappingDiagramGenerator {
 						else if (ANNOTATION_ONE_TO_MANY.equals(annotationName)) {
 							for (Type type : ((ParameterizedType)field.getGenericType()).getActualTypeArguments()) {
 								if (type instanceof Class) {
-									classModel.addJpaDependency(((Class)type).getName(), JpaDependencyType.ONE_TO_MANY);
+									updateDependencyCache(dependencyModel, jpaDependencyCache, classModel, ((Class)type).getName(), JpaDependencyType.ONE_TO_MANY);
 								}
 							}
 						}
 						else if (ANNOTATION_MANY_TO_ONE.equals(annotationName)) {
-							classModel.addJpaDependency(fieldType.getName(), JpaDependencyType.MANY_TO_ONE);
+							updateDependencyCache(dependencyModel, jpaDependencyCache, classModel, fieldType.getName(), JpaDependencyType.MANY_TO_ONE);
 						}
 						else if (ANNOTATION_ONE_TO_ONE.equals(annotationName)) {
-							classModel.addJpaDependency(fieldType.getName(), JpaDependencyType.ONE_TO_ONE);
+							updateDependencyCache(dependencyModel, jpaDependencyCache, classModel, fieldType.getName(), JpaDependencyType.ONE_TO_ONE);
+						}
+						else if (ANNOTATION_MANY_TO_MANY.equals(annotationName)) {
+							updateDependencyCache(dependencyModel, jpaDependencyCache, classModel, fieldType.getName(), JpaDependencyType.MANY_TO_MANY);
 						}
 						else if (ANNOTATION_ID_COLUMN.equals(annotationName)) {
 							classModel.addIdColumn(field.getName());
@@ -223,6 +185,41 @@ public class JpaMappingDiagramGenerator {
 				continue;
 			}
 		}
+	}
+	
+	private static void updateDependencyCache(JpaDependencyDiagramModel diagramModel, Map<String, Map<String, JpaDependencyType>> jpaDependencyCache, JpaClassModel classModel, String dependentClassName, JpaDependencyType dependencyType) {
+		// check if the dependent class already has the mapping
+		JpaClassModel dependentClass = diagramModel.getClass(dependentClassName);
+		Map<String, JpaDependencyType> cache = jpaDependencyCache.get(dependentClassName);
+		if (cache != null && dependentClass != null) {
+			JpaDependencyType type = cache.get(classModel.getName());
+			if (type != null) {
+				int result = type.compareTo(dependencyType);
+				// check if higher priority JPA mapping already exists between
+				// the classes
+				if (result < 0 || result == 0
+						&& type != JpaDependencyType.ONE_TO_MANY) {
+					return;
+				}
+				if (result == 0 && type == JpaDependencyType.ONE_TO_MANY) {
+					// the one-to-many relationship is present both the sides so
+					// convert it to many-to-many
+					dependencyType = JpaDependencyType.MANY_TO_MANY;
+				}
+				// remove entry from the cache and JpaClassModel of the
+				// associated class
+				cache.remove(classModel.getName());
+				dependentClass.removeJpaDependency(classModel.getName());
+			}
+		}
+		
+		// no mapping or lower priority mapping exists between the entities so create new entry in cache
+		cache = jpaDependencyCache.get(classModel.getName());
+		if (cache == null) {
+			cache = new HashMap<String, JpaDependencyType>(3);
+		}
+		cache.put(dependentClass.getName(), dependencyType);
+		classModel.addJpaDependency(dependentClassName, dependencyType);
 	}
 
 	protected static void extractColumn(JpaClassModel classModel, Annotation annotation) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {

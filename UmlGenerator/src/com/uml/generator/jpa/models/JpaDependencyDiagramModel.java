@@ -3,8 +3,8 @@
  */
 package com.uml.generator.jpa.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.uml.generator.models.UmlModel;
 
@@ -14,10 +14,14 @@ import com.uml.generator.models.UmlModel;
  */
 public class JpaDependencyDiagramModel extends UmlModel {
 	
-	private List<JpaClassModel> classes = new ArrayList<JpaClassModel>();
+	private Map<String, JpaClassModel> classes = new LinkedHashMap<String, JpaClassModel>();
 
 	public void addClass(JpaClassModel classModel) {
-		classes.add(classModel);
+		classes.put(classModel.getName(), classModel);
+	}
+	
+	public JpaClassModel getClass(String name) {
+		return classes.get(name);
 	}
 	
 	/**
@@ -29,7 +33,7 @@ public class JpaDependencyDiagramModel extends UmlModel {
 		uml.append(START_UML);
 
 		// add classes
-		for(JpaClassModel clazz : classes) {
+		for(JpaClassModel clazz : classes.values()) {
 			uml.append(NEW_LINE).append(clazz.getUml());
 		}
 		

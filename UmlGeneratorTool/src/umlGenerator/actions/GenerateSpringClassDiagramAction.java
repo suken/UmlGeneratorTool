@@ -17,10 +17,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
 
 import umlGenerator.MultipleProjectAction;
 import umlGenerator.windows.GenerateUMLOptionsDialog;
@@ -36,21 +34,10 @@ public class GenerateSpringClassDiagramAction extends MultipleProjectAction {
 	private static final Logger LOGGER = Logger.getLogger("GenerateSpringClassDiagramAction");
 	
 	/**
-	 * {@inheritDoc}
-	 */
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-	}
-	
-	@Override
-	protected String getNatureId() {
-		return JavaCore.NATURE_ID;
-	}
-
-	/**
-	 * Deploy a project to it's deployed location.
+	 * Generate UML for the given project.
 	 * 
 	 * @param javaProject
-	 *            The project to deploy
+	 *            The project for which UML is to be generated.
 	 * @param shell
 	 *            The current shell used to display progress monitors.
 	 * @throws CoreException

@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 /**
@@ -77,7 +78,7 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 		for (Object resource : selected.toArray()) {
 			try {
 				if (resource instanceof IProject
-						&& ((IProject)resource).hasNature(getNatureId())) {
+						&& ((IProject)resource).hasNature(JavaCore.NATURE_ID)) {
 					selectedProjects.add((IProject) resource);
 				} else {
 					enableAction = false;
@@ -166,7 +167,7 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 	}
 	
 	/**
-	 * Calculate the deployed location of a project
+	 * Get the deployed location of a project
 	 * 
 	 * @param project
 	 *            The project
@@ -275,5 +276,9 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 	
 	protected abstract void generateUml(IProject javaProject, Shell shell) throws Exception;
 	
-	protected abstract String getNatureId();
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
+	}
 }
