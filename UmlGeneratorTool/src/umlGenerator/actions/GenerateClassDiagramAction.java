@@ -75,8 +75,9 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 						dialog.open();
 					}
 				});
-				if (dialog.getReturnCode() != SWT.CANCEL || dialog.getReturnCode() != SWT.CLOSE
-						|| dialog.getReturnCode() != SWT.ABORT) {
+				
+				// only proceed with UML generation if user pressed OK
+				if (dialog.getReturnCode() == 0) {
 					IJavaProject javaProject = JavaCore.create(project);
 					progress.worked(10);
 
@@ -126,12 +127,8 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 					
 					// show the final result
 					showResultDialog(shell, project.getName(), success, reason);
-					return Status.OK_STATUS;
 				}
-				else {
-					// user has cancelled the generation process so no need to do anything
-					return Status.OK_STATUS;
-				}
+				return Status.OK_STATUS;
 			}
 		};
 		generateJob.setPriority(Job.SHORT);

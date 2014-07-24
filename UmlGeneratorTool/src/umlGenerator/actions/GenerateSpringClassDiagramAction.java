@@ -68,43 +68,47 @@ public class GenerateSpringClassDiagramAction extends MultipleProjectAction {
 						dialog.open();
 					}
 				});
-				progress.worked(10);
-
-				try {
-					IJavaProject javaProject = JavaCore.create(project);
-					progress.subTask("Export the project " + project.getName() + " jar file.");
-					IPath deployedJarFile = exportProjectJar(project, shell);
-					progress.worked(40);
-					
-					progress.subTask("Extracting dependent jars for project " + project.getName());
-					List<URL> urls = getDepedentJars(project, javaProject, javaProject.getRawClasspath(), deployedJarFile);
+				
+				// only proceed with UML generation if user pressed OK
+				if (dialog.getReturnCode() == 0) {
 					progress.worked(10);
 					
-					// create output directory
-					File umlDir = project.getFolder("uml").getLocation().toFile();
-					if (!umlDir.exists()) {
-						umlDir.mkdir();
+					try {
+						IJavaProject javaProject = JavaCore.create(project);
+						progress.subTask("Export the project " + project.getName() + " jar file.");
+						IPath deployedJarFile = exportProjectJar(project, shell);
+						progress.worked(40);
+						
+						progress.subTask("Extracting dependent jars for project " + project.getName());
+						List<URL> urls = getDepedentJars(project, javaProject, javaProject.getRawClasspath(), deployedJarFile);
+						progress.worked(10);
+						
+						// create output directory
+						File umlDir = project.getFolder("uml").getLocation().toFile();
+						if (!umlDir.exists()) {
+							umlDir.mkdir();
+						}
+						
+						progress.subTask("Generating Spring class diagram.");
+						UmlOptions options = new UmlOptions();
+						options.setPackagesIncluded(dialog.arePackagesIncluded());
+						options.setTestIncluded(dialog.areTestsIncluded());
+						options.setFieldsIncluded(dialog.areFieldsIncluded());
+						options.setMethodsIncluded(dialog.areMethodsIncluded());
+						options.setIncludePatterns(dialog.getIncludePattern());
+						options.setExcludePatterns(dialog.getExcludePatterns());
+						UmlGenerator.generateSpringClassDiagram(urls.get(0), urls.toArray(new URL[] {}), project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
+						progress.worked(40);
+						LOGGER.log(Level.ALL, "Finished generation of spring class diagram for project : " + project.getName());
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+						reason = ExceptionUtils.getStackTrace(e);
+						success = false;
 					}
 					
-					progress.subTask("Generating Spring class diagram.");
-					UmlOptions options = new UmlOptions();
-					options.setPackagesIncluded(dialog.arePackagesIncluded());
-					options.setTestIncluded(dialog.areTestsIncluded());
-					options.setFieldsIncluded(dialog.areFieldsIncluded());
-					options.setMethodsIncluded(dialog.areMethodsIncluded());
-					options.setIncludePatterns(dialog.getIncludePattern());
-					options.setExcludePatterns(dialog.getExcludePatterns());
-					UmlGenerator.generateSpringClassDiagram(urls.get(0), urls.toArray(new URL[] {}), project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
-					progress.worked(40);
-					LOGGER.log(Level.ALL, "Finished generation of spring class diagram for project : " + project.getName());
+					showResultDialog(shell, project.getName(), success, reason);
 				}
-				catch (Exception e) {
-					e.printStackTrace();
-					reason = ExceptionUtils.getStackTrace(e);
-					success = false;
-				}
-				
-				showResultDialog(shell, project.getName(), success, reason);
 				return Status.OK_STATUS;
 			}
 		}; 

@@ -61,24 +61,28 @@ public class GenerateComponentDiagramAction extends MultipleProjectAction {
 						dialog.open();
 					}
 				});
-				progress.worked(20);
-
-				try {
-					progress.subTask("Generating Component Diagram.");
-					UmlOptions options = new UmlOptions();
-					options.setIncludePatterns(dialog.getIncludePattern());
-					options.setExcludePatterns(dialog.getExcludePatterns());
-					UmlGenerator.generateComponentDiagram(project.getLocation().toFile().getPath(),
-							project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
-					progress.worked(80);
-					LOGGER.log(Level.ALL, "Finished generation of component diagram for project : " + project.getName());
+				
+				// only proceed with UML generation if user pressed OK
+				if (dialog.getReturnCode() == 0) {
+					progress.worked(20);
+					
+					try {
+						progress.subTask("Generating Component Diagram.");
+						UmlOptions options = new UmlOptions();
+						options.setIncludePatterns(dialog.getIncludePattern());
+						options.setExcludePatterns(dialog.getExcludePatterns());
+						UmlGenerator.generateComponentDiagram(project.getLocation().toFile().getPath(),
+								project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
+						progress.worked(80);
+						LOGGER.log(Level.ALL, "Finished generation of component diagram for project : " + project.getName());
+					}
+					catch (Exception e) {
+						success = false;
+						reason = ExceptionUtils.getStackTrace(e);
+					}
+					
+					showResultDialog(shell, project.getName(), success, reason);
 				}
-				catch (Exception e) {
-					success = false;
-					reason = ExceptionUtils.getStackTrace(e);
-				}
-
-				showResultDialog(shell, project.getName(), success, reason);
 				return Status.OK_STATUS;
 			}
 			
