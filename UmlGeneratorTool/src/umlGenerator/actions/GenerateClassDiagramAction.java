@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
@@ -74,45 +75,63 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 						dialog.open();
 					}
 				});
-				IJavaProject javaProject = JavaCore.create(project);
-				progress.worked(10);
-				
-				try {
-					progress.subTask("Exporting project " + project.getName() + " to jar file.");
-					final IPath deployedJarFile = exportProjectJar(project, shell);
-					progress.worked(40);
-					
-					progress.subTask("Extracting dependent jars for " + project.getName());
-					List<URL> urls = getDepedentJars(project, javaProject, javaProject.getRawClasspath(), deployedJarFile);
+				if (dialog.getReturnCode() != SWT.CANCEL || dialog.getReturnCode() != SWT.CLOSE
+						|| dialog.getReturnCode() != SWT.ABORT) {
+					IJavaProject javaProject = JavaCore.create(project);
 					progress.worked(10);
-					
-					// create output directory
-					File umlDir = project.getFolder("uml").getLocation().toFile();
-					if (!umlDir.exists()) {
-						umlDir.mkdir();
+
+					try {
+						progress.subTask("Exporting project "
+								+ project.getName() + " to jar file.");
+						final IPath deployedJarFile = exportProjectJar(project,
+								shell);
+						progress.worked(40);
+
+						progress.subTask("Extracting dependent jars for "
+								+ project.getName());
+						List<URL> urls = getDepedentJars(project, javaProject,
+								javaProject.getRawClasspath(), deployedJarFile);
+						progress.worked(10);
+
+						// create output directory
+						File umlDir = project.getFolder("uml").getLocation()
+								.toFile();
+						if (!umlDir.exists()) {
+							umlDir.mkdir();
+						}
+
+						progress.subTask("Generating class diagram for "
+								+ project.getName());
+						UmlOptions options = new UmlOptions();
+						options.setPackagesIncluded(dialog
+								.arePackagesIncluded());
+						options.setTestIncluded(dialog.areTestsIncluded());
+						options.setFieldsIncluded(dialog.areFieldsIncluded());
+						options.setMethodsIncluded(dialog.areMethodsIncluded());
+						options.setIncludePatterns(dialog.getIncludePattern());
+						options.setExcludePatterns(dialog.getExcludePatterns());
+						UmlGenerator.generateClassDiagram(urls.get(0),
+								urls.toArray(new URL[] {}), project.getName(),
+								umlDir.getPath(), options);
+						LOGGER.log(Level.INFO,
+								"Finished generation of class diagram for project : "
+										+ project.getName());
+						progress.worked(40);
+					} catch (Exception e) {
+						// capture exception and show it to user
+						e.printStackTrace();
+						reason = ExceptionUtils.getStackTrace(e);
+						success = false;
 					}
 					
-					progress.subTask("Generating class diagram for " + project.getName());
-					UmlOptions options = new UmlOptions();
-					options.setPackagesIncluded(dialog.arePackagesIncluded());
-					options.setTestIncluded(dialog.areTestsIncluded());
-					options.setFieldsIncluded(dialog.areFieldsIncluded());
-					options.setMethodsIncluded(dialog.areMethodsIncluded());
-					options.setIncludePatterns(dialog.getIncludePattern());
-					options.setExcludePatterns(dialog.getExcludePatterns());
-					UmlGenerator.generateClassDiagram(urls.get(0), urls.toArray(new URL[] {}), project.getName(), umlDir.getPath(), options);
-					LOGGER.log(Level.INFO, "Finished generation of class diagram for project : " + project.getName());
-					progress.worked(40);
+					// show the final result
+					showResultDialog(shell, project.getName(), success, reason);
+					return Status.OK_STATUS;
 				}
-				catch (Exception e) {
-					// capture exception and show it to user
-					e.printStackTrace();
-					reason = ExceptionUtils.getStackTrace(e);
-					success = false;
+				else {
+					// user has cancelled the generation process so no need to do anything
+					return Status.OK_STATUS;
 				}
-				
-				showResultDialog(shell, project.getName(), success, reason);
-				return Status.OK_STATUS;
 			}
 		};
 		generateJob.setPriority(Job.SHORT);
