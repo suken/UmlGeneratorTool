@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>UmlGeneratorTool</groupId>
+  <artifactId>UmlGeneratorTool</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <name>UmlGeneratorTool</name>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+  </build>
+  <description>Eclipse plugin for UmlGenerator. The plugin supports generation of class diagram, sping dependency diagram, component diagram and JPA mapping diagram.</description>
+  <url>https://github.com/suken/UmlGeneratorTool</url>
+  <organization>
+  	<name>Suken Shah</name>
+  	<url>https://github.com/suken/UmlGeneratorTool</url>
+  </organization>
+  <dependencies>
+  	<dependency>
+  		<groupId>UmlGenerator</groupId>
+  		<artifactId>UmlGenerator</artifactId>
+  		<version>1.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>UmlGenerator</groupId>
+  			<artifactId>UmlGenerator</artifactId>
+  			<version>1.0.1-SNAPSHOT</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
+</project>
