@@ -34,6 +34,9 @@ public class ClassDiagramModel extends UmlModel {
 		StringBuffer uml = new StringBuffer();
 		uml.append(START_UML);
 		
+		// add number of pages
+		uml.append(NEW_LINE).append("page 2x2").append(NEW_LINE);
+		
 		// add packages
 		for(PackageModel packaze : packages) {
 			uml.append(NEW_LINE).append(packaze.getUml());

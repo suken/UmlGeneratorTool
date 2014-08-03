@@ -12,7 +12,7 @@ import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sourceforge.plantuml.SourceStringReader;
+import net.sourceforge.plantuml.SourceFileReader;
 
 import com.uml.generator.classDiagram.ClassDiagramGenerator;
 import com.uml.generator.classDiagram.models.ClassDiagramModel;
@@ -67,8 +67,8 @@ public class UmlGenerator {
 			String uml = classDiagramModel.getUml().replace("$", "_Inner");
 			
 			// generate the UML and plant uml text files
-			exportToPlantUMLFile(projectName, umlDirPath, uml, "_ClassDiagram");
-			exportToPngFile(projectName, umlDirPath, uml, "_ClassDiagram");
+			String sourceFilePath = exportToPlantUMLFile(projectName, umlDirPath, uml, "_ClassDiagram");
+			exportToPngFile(projectName, umlDirPath, sourceFilePath, "_ClassDiagram");
 		}
 		finally {
 			Thread.currentThread().setContextClassLoader(loader);
@@ -189,7 +189,7 @@ public class UmlGenerator {
 		}
 	}
 
-	private static void exportToPlantUMLFile(String projectName, String umlDirPath, String uml, String filePostfix) throws IOException {
+	private static String exportToPlantUMLFile(String projectName, String umlDirPath, String uml, String filePostfix) throws IOException {
 		LOGGER.log(Level.INFO, "Writing PlantUML string to *.plantuml file");
 		String umlStringFile = umlDirPath + File.separator + projectName + filePostfix + ".plantuml";
 		// write plant UML text file
@@ -198,18 +198,20 @@ public class UmlGenerator {
 		writer.flush();
 		writer.close();
 		LOGGER.log(Level.INFO, "The UML diagram is generated under " + umlDirPath);
+		return umlStringFile;
 	}
 	
-	private static void exportToPngFile(String projectName, String umlDirPath, String uml, String filePostfix) throws IOException {
+	private static void exportToPngFile(String projectName, String umlDirPath, String sourceFilePath, String filePostfix) throws IOException {
 		LOGGER.log(Level.INFO, "Writing PlantUML string to *.png file");
-		String umlFile = umlDirPath + File.separator + projectName + filePostfix + ".png";
-		SourceStringReader reader = new SourceStringReader(uml);
-		// write the plant UML image file
-		File file = new File(umlFile);
-		if (file.exists()) {
-			file.delete();
+//		String umlFile = umlDirPath + File.separator + projectName + filePostfix + ".png";
+		File umlDir = new File(umlDirPath);
+		if (umlDir.exists()) {
+			umlDir.delete();
 		}
-		reader.generateImage(file);
+
+		// write the plant UML image file
+		SourceFileReader reader = new SourceFileReader(new File(sourceFilePath), umlDir);
+		reader.getGeneratedImages();
 	}
 	
 }
