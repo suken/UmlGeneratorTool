@@ -25,6 +25,8 @@ public class SpringClassModel extends ClassModel {
 	
 	private static final String CONFIGURATION = " << (C,#DD9900) Configuration >> ";
 	
+	private static final String INJECTED_RELATIONSHIP = "<--";
+	
 	private SpringClassType classType = SpringClassType.NONE;
 	
 	private StringBuffer note = new StringBuffer();
@@ -96,8 +98,8 @@ public class SpringClassModel extends ClassModel {
 		getDepenciesUml(uml);
 		
 		// spring dependencies
-		for(Entry<String, DependencyType>  dependency : springDependencies.entrySet()) {
-			uml.append(NEW_LINE).append(getName()).append(DEPENDS).append(dependency.getKey()).append(" : ").append(dependency.getValue().toString()).append(" ");
+		for (Entry<String, DependencyType>  dependency : springDependencies.entrySet()) {
+			uml.append(NEW_LINE).append(getName()).append(INJECTED_RELATIONSHIP).append(dependency.getKey()).append(" : ").append(dependency.getValue().toString()).append(" ");
 		}
 		
 		uml.append(NEW_LINE);
