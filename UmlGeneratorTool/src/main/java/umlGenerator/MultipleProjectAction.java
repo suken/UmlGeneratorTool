@@ -212,6 +212,7 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 	 * @throws DeployFailedException
 	 *             If any error occurs.
 	 */
+	@SuppressWarnings("resource")
 	protected void copyFile(File srcFile, File dstFile) throws IOException {
 		// Create channel for the source
 		FileChannel srcChannel = new FileInputStream(srcFile).getChannel();
@@ -227,6 +228,7 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 		dstChannel.close();
 	}
 	
+	@SuppressWarnings("deprecation")
 	protected List<URL> getDepedentJars(IProject project, IJavaProject javaProject, IClasspathEntry[] classpathEntries,	IPath deployedJarFile) throws MalformedURLException, JavaModelException {
 		List<URL> urls = new ArrayList<URL>();
 		urls.add(deployedJarFile.toFile().toURL());
@@ -236,6 +238,7 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 		return urls;
 	}
 	
+	@SuppressWarnings("deprecation")
 	private List<URL> extractClassPathEntry(IProject project, IJavaProject javaProject, IClasspathEntry classpathEntry, boolean relativeProjectPath) throws MalformedURLException, JavaModelException {
 		List<URL> urls = new ArrayList<URL>();
 		if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
@@ -256,9 +259,10 @@ public abstract class MultipleProjectAction implements IObjectActionDelegate {
 				urls.addAll(extractClassPathEntry(project, javaProject, entry, false));
 			}
 		}
-		else if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
-			urls.add(project.getLocation().append(classpathEntry.getPath().removeFirstSegments(1).makeRelative()).toFile().toURL());
-		}
+		//TODO: To check how to add project dependencies into ClassLoader.
+//		else if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
+//			urls.add(project.getLocation().append(classpathEntry.getPath().removeFirstSegments(1).makeRelative()).toFile().toURL());
+//		}
 		return urls;
 	}
 	
