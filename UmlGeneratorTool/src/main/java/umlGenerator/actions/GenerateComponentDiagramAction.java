@@ -71,6 +71,7 @@ public class GenerateComponentDiagramAction extends MultipleProjectAction {
 						UmlOptions options = new UmlOptions();
 						options.setIncludePatterns(dialog.getIncludePattern());
 						options.setExcludePatterns(dialog.getExcludePatterns());
+						options.setFileFormat(dialog.getFileFormat());
 						UmlGenerator.generateComponentDiagram(project.getLocation().toFile().getPath(),
 								project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
 						progress.worked(80);

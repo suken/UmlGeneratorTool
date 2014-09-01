@@ -97,6 +97,7 @@ public class GenerateSpringClassDiagramAction extends MultipleProjectAction {
 						options.setMethodsIncluded(dialog.areMethodsIncluded());
 						options.setIncludePatterns(dialog.getIncludePattern());
 						options.setExcludePatterns(dialog.getExcludePatterns());
+						options.setFileFormat(dialog.getFileFormat());
 						UmlGenerator.generateSpringClassDiagram(urls.get(0), urls.toArray(new URL[] {}), project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
 						progress.worked(40);
 						LOGGER.log(Level.ALL, "Finished generation of spring class diagram for project : " + project.getName());

@@ -91,6 +91,7 @@ public class GenerateJpaMappingDiagramAction extends MultipleProjectAction {
 						UmlOptions options = new UmlOptions();
 						options.setIncludePatterns(dialog.getIncludePattern());
 						options.setExcludePatterns(dialog.getExcludePatterns());
+						options.setFileFormat(dialog.getFileFormat());
 						UmlGenerator.generateJPAMappingDiagram(urls.get(0), urls.toArray(new URL[] {}),
 								project.getName(), project.getFolder("uml").getLocation().toFile().getPath(), options);
 						progress.worked(40);

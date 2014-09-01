@@ -12,6 +12,8 @@ import java.net.URLClassLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import net.sourceforge.plantuml.FileFormat;
+import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.SourceFileReader;
 
 import com.uml.generator.classDiagram.ClassDiagramGenerator;
@@ -68,7 +70,7 @@ public class UmlGenerator {
 			
 			// generate the UML and plant uml text files
 			String sourceFilePath = exportToPlantUMLFile(projectName, umlDirPath, uml, "_ClassDiagram");
-			exportToPngFile(projectName, umlDirPath, sourceFilePath, "_ClassDiagram");
+			exportToFile(projectName, umlDirPath, sourceFilePath, "_ClassDiagram", options.getFileFormat());
 		}
 		finally {
 			Thread.currentThread().setContextClassLoader(loader);
@@ -120,7 +122,7 @@ public class UmlGenerator {
 			
 			// generate the UML and plant uml text files
 			exportToPlantUMLFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram");
-			exportToPngFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram");
+			exportToFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram", options.getFileFormat());
 		}
 		finally {
 			Thread.currentThread().setContextClassLoader(loader);
@@ -152,7 +154,7 @@ public class UmlGenerator {
 		String uml = ComponentDiagramGenerator.generateComponentDiagram(srcDir, options);
 		// generate the UML and plant uml text files
 		exportToPlantUMLFile(projectName, umlDirPath, uml, "_ComponentDiagram");
-		exportToPngFile(projectName, umlDirPath, uml, "_ComponentDiagram");
+		exportToFile(projectName, umlDirPath, uml, "_ComponentDiagram", options.getFileFormat());
 	}
 	
 	/**
@@ -182,7 +184,7 @@ public class UmlGenerator {
 			
 			// generate the UML and plant uml text files
 			exportToPlantUMLFile(projectName, umlDirPath, uml, "_JPAMappingDiagram");
-			exportToPngFile(projectName, umlDirPath, uml, "_JPAMappingDiagram");
+			exportToFile(projectName, umlDirPath, uml, "_JPAMappingDiagram", options.getFileFormat());
 		}
 		finally {
 			Thread.currentThread().setContextClassLoader(loader);
@@ -201,16 +203,16 @@ public class UmlGenerator {
 		return umlStringFile;
 	}
 	
-	private static void exportToPngFile(String projectName, String umlDirPath, String sourceFilePath, String filePostfix) throws IOException {
-		LOGGER.log(Level.INFO, "Writing PlantUML string to *.png file");
+	private static void exportToFile(String projectName, String umlDirPath, String sourceFilePath, String filePostfix, FileFormat format) throws IOException {
+		LOGGER.log(Level.INFO, "Writing PlantUML string to *." + format + " file");
 //		String umlFile = umlDirPath + File.separator + projectName + filePostfix + ".png";
-		File umlDir = new File(umlDirPath);
-		if (umlDir.exists()) {
-			umlDir.delete();
-		}
+//		File umlDir = new File(umlDirPath);
+//		if (umlDir.exists()) {
+//			umlDir.delete();
+//		}
 
 		// write the plant UML image file
-		SourceFileReader reader = new SourceFileReader(new File(sourceFilePath), umlDir);
+		SourceFileReader reader = new SourceFileReader(new File(sourceFilePath), new File(umlDirPath), new FileFormatOption(format));
 		reader.getGeneratedImages();
 	}
 	
