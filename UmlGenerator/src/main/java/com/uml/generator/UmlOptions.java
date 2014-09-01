@@ -3,6 +3,8 @@
  */
 package com.uml.generator;
 
+import net.sourceforge.plantuml.FileFormat;
+
 /**
  * @author Suken Shah
  *
@@ -15,6 +17,7 @@ public class UmlOptions {
 	private boolean testIncluded;
 	private String includePatterns;
 	private String excludePatterns;
+	private FileFormat fileFormat;
 	/**
 	 * @return the packagesIncluded
 	 */
@@ -87,6 +90,10 @@ public class UmlOptions {
 	public void setExcludePatterns(String excludePatterns) {
 		this.excludePatterns = excludePatterns;
 	}
-	
-	
+	public void setFileFormat(FileFormat format) {
+		this.fileFormat = format;
+	}
+	public FileFormat getFileFormat() {
+		return this.fileFormat;
+	}
 }

@@ -110,6 +110,7 @@ public class GenerateClassDiagramAction extends MultipleProjectAction {
 						options.setMethodsIncluded(dialog.areMethodsIncluded());
 						options.setIncludePatterns(dialog.getIncludePattern());
 						options.setExcludePatterns(dialog.getExcludePatterns());
+						options.setFileFormat(dialog.getFileFormat());
 						UmlGenerator.generateClassDiagram(urls.get(0),
 								urls.toArray(new URL[] {}), project.getName(),
 								umlDir.getPath(), options);
