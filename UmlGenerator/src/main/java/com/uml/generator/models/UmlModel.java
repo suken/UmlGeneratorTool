@@ -5,7 +5,6 @@ package com.uml.generator.models;
 
 /**
  * @author sukenshah
- *
  */
 public abstract class UmlModel {
 	

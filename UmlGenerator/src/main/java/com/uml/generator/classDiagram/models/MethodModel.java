@@ -4,7 +4,6 @@
 package com.uml.generator.classDiagram.models;
 
 import java.lang.reflect.Modifier;
-import java.util.List;
 
 import com.uml.generator.models.UmlModel;
 
@@ -14,25 +13,21 @@ import com.uml.generator.models.UmlModel;
  */
 public class MethodModel extends UmlModel {
 
-	private String name;
-	
-	private List<FieldModel> args;
-	
-	private String returnType;
+	private final String name;
 	
 	private ModifierType access;
 	
-	public MethodModel(String name, int modifier) {
+	public MethodModel(final String name, final int modifier) {
 		this.name = name;
 		switch (modifier) {
 		case Modifier.PUBLIC:
-			this.access = ModifierType.PUBLIC;
+			access = ModifierType.PUBLIC;
 			break;
 		case Modifier.PRIVATE:
-			this.access = ModifierType.PRIVATE;
+			access = ModifierType.PRIVATE;
 			break;
 		case Modifier.PROTECTED:
-			this.access = ModifierType.PROTECTED;
+			access = ModifierType.PROTECTED;
 			break;
 		default:
 			access = ModifierType.PROTECTED;

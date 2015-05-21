@@ -10,7 +10,6 @@ import com.uml.generator.models.UmlModel;
 
 /**
  * @author sukenshah
- *
  */
 public class ClassDiagramModel extends UmlModel {
 

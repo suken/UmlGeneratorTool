@@ -1,10 +1,12 @@
 /**
- * 
+ *
  */
 package com.uml.generator.componentDiagram.models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Getter;
 
 import com.uml.generator.models.UmlModel;
 
@@ -13,30 +15,27 @@ import com.uml.generator.models.UmlModel;
  *
  */
 public class ComponentModel extends UmlModel {
-	
+
 	private static final String DATABASE = " database ";
-	
+
 	private static final String SOURCE_START = " [";
-	
+
 	private static final String END_SOURCE = "] ";
 
-	private String name;
-	
-	private ComponentType type;
-	
-	private List<String> dependentComponents = new ArrayList<String>(5);
-	
-	public ComponentModel(String name, ComponentType type) {
+	@Getter
+	private final String name;
+
+	private final ComponentType type;
+
+	private final List<String> dependentComponents = new ArrayList<String>(5);
+
+	public ComponentModel(final String name, final ComponentType type) {
 		this.name = name;
 		this.type = type;
 	}
-	
-	public void addDepedentComponent(String name) {
+
+	public void addDepedentComponent(final String name) {
 		dependentComponents.add(name);
-	}
-	
-	public String getName() {
-		return name;
 	}
 
 	/**
@@ -63,21 +62,20 @@ public class ComponentModel extends UmlModel {
 			break;
 		}
 		uml.append(NEW_LINE);
-		
+
 		return uml.toString();
 	}
-	
+
 	public String getDependencyUML() {
 		StringBuffer uml = new StringBuffer();
 		// add dependencies
 		String componentName = SOURCE_START + name + END_SOURCE;
 		for (String dependentComponent : dependentComponents) {
 			uml.append(componentName).append(" --> ").append(SOURCE_START)
-					.append(dependentComponent).append(END_SOURCE)
-					.append(NEW_LINE);
+			.append(dependentComponent).append(END_SOURCE)
+			.append(NEW_LINE);
 		}
 		return uml.toString();
 	}
 
 }
- 

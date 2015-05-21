@@ -1,10 +1,12 @@
 /**
- * 
+ *
  */
 package com.uml.generator.classDiagram.models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Getter;
 
 import com.uml.generator.models.UmlModel;
 
@@ -13,29 +15,20 @@ import com.uml.generator.models.UmlModel;
  */
 public class PackageModel extends UmlModel {
 
-	private String name;
-	
-	private List<ClassModel> classes = new ArrayList<ClassModel>(3);
-	
-	public PackageModel(String name) {
+	@Getter
+	private final String name;
+
+	@Getter
+	private final List<ClassModel> classes = new ArrayList<ClassModel>(3);
+
+	public PackageModel(final String name) {
 		this.name = name;
 	}
-	
-	public String getName() {
-		return name;
+
+	public void addClass(final ClassModel clazz) {
+		classes.add(clazz);
 	}
-	
-	public void addClass(ClassModel clazz) {
-		this.classes.add(clazz);
-	}
-	
-	public List<ClassModel> getClasses() {
-		return this.classes;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.uml.generator.models.UmlModel#getUml()
-	 */
+
 	@Override
 	public String getUml() {
 		StringBuffer uml = new StringBuffer();
