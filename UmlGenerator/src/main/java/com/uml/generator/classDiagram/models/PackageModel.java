@@ -3,11 +3,11 @@
  */
 package com.uml.generator.classDiagram.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 
+import com.google.common.collect.Lists;
 import com.uml.generator.models.UmlModel;
 
 /**
@@ -19,7 +19,7 @@ public class PackageModel extends UmlModel {
 	private final String name;
 
 	@Getter
-	private final List<ClassModel> classes = new ArrayList<ClassModel>(3);
+	private final List<ClassModel> classes = Lists.newArrayList();
 
 	public PackageModel(final String name) {
 		this.name = name;

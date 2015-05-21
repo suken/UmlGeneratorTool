@@ -3,11 +3,11 @@
  */
 package com.uml.generator.componentDiagram.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 
+import com.google.common.collect.Lists;
 import com.uml.generator.models.UmlModel;
 
 /**
@@ -27,7 +27,7 @@ public class ComponentModel extends UmlModel {
 
 	private final ComponentType type;
 
-	private final List<String> dependentComponents = new ArrayList<String>(5);
+	private final List<String> dependentComponents = Lists.newArrayList();
 
 	public ComponentModel(final String name, final ComponentType type) {
 		this.name = name;

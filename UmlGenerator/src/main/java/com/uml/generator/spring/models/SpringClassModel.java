@@ -3,12 +3,12 @@
  */
 package com.uml.generator.spring.models;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import lombok.Setter;
 
+import com.google.common.collect.Maps;
 import com.uml.generator.classDiagram.models.ClassModel;
 import com.uml.generator.classDiagram.models.ClassType;
 
@@ -34,7 +34,8 @@ public class SpringClassModel extends ClassModel {
 
 	private final StringBuffer note = new StringBuffer();
 
-	private final Map<String, DependencyType> springDependencies = new HashMap<String, DependencyType>();
+	private final Map<String, DependencyType> springDependencies = Maps
+			.newHashMap();
 
 	public SpringClassModel(final String name) {
 		super(name);

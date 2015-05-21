@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 package com.uml.generator.jpa.models;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.uml.generator.models.UmlModel;
 
 /**
@@ -13,17 +13,17 @@ import com.uml.generator.models.UmlModel;
  *
  */
 public class JpaDependencyDiagramModel extends UmlModel {
-	
-	private Map<String, JpaClassModel> classes = new LinkedHashMap<String, JpaClassModel>();
 
-	public void addClass(JpaClassModel classModel) {
+	private final Map<String, JpaClassModel> classes = Maps.newLinkedHashMap();
+
+	public void addClass(final JpaClassModel classModel) {
 		classes.put(classModel.getName(), classModel);
 	}
-	
-	public JpaClassModel getClass(String name) {
+
+	public JpaClassModel getClass(final String name) {
 		return classes.get(name);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -36,7 +36,7 @@ public class JpaDependencyDiagramModel extends UmlModel {
 		for(JpaClassModel clazz : classes.values()) {
 			uml.append(NEW_LINE).append(clazz.getUml());
 		}
-		
+
 		uml.append(NEW_LINE).append(END_UML);
 		return uml.toString();
 	}

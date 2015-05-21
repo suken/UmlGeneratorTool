@@ -4,12 +4,12 @@
 package com.uml.generator.classDiagram.models;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
 
+import com.google.common.collect.Lists;
 import com.uml.generator.models.UmlModel;
 
 /**
@@ -27,13 +27,13 @@ public class ClassModel extends UmlModel {
 	@Setter
 	private String parent;
 
-	private final List<FieldModel> fields = new ArrayList<FieldModel>(5);
+	private final List<FieldModel> fields = Lists.newArrayList();
 
-	private final List<MethodModel> methods = new ArrayList<MethodModel>(3);
+	private final List<MethodModel> methods = Lists.newArrayList();
 
-	private final List<String> interfaces = new ArrayList<String>(3);
+	private final List<String> interfaces = Lists.newArrayList();
 
-	private final List<String> dependencies = new ArrayList<String>(5);
+	private final List<String> dependencies = Lists.newArrayList();
 
 	public ClassModel(final String name) {
 		this.name = name;
@@ -55,7 +55,7 @@ public class ClassModel extends UmlModel {
 		dependencies.add(clazz);
 	}
 
-	public void setType(final Class clazz) {
+	public void setType(final Class<?> clazz) {
 		type = ClassType.CLASS;
 		if (clazz.isInterface()) {
 			type = ClassType.INTERFACE;

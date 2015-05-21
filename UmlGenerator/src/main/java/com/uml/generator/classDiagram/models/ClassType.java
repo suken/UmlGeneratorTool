@@ -1,39 +1,28 @@
 /**
- * 
+ *
  */
 package com.uml.generator.classDiagram.models;
+
+import lombok.Getter;
 
 /**
  * @author sukenshah
  */
 public enum ClassType {
-	CLASS,
-	INTERFACE,
-	ABSTRACT,
-	ENUM,
-	ANNOTATION;
-	
-	public static String convert(ClassType type) {
-		String typeString = null;
-		switch (type) {
-		case ABSTRACT:
-			typeString = " abstract ";
-			break;
-		case CLASS:
-			typeString = " class ";
-			break;
-		case INTERFACE:
-			typeString = " interface ";
-			break;
-		case ENUM:
-			typeString = " enum ";
-			break;
-		case ANNOTATION:
-			typeString = " annotation ";
-			break;
-		default:
-			break;
-		}
-		return typeString; 
+	CLASS(" class "),
+	INTERFACE(" interface "),
+	ABSTRACT(" abstract "),
+	ENUM(" enum "),
+	ANNOTATION(" annotation ");
+
+	@Getter
+	private final String umlStr;
+
+	ClassType(final String uml) {
+		umlStr = uml;
+	}
+
+	public static String convert(final ClassType type) {
+		return type.getUmlStr();
 	}
 }

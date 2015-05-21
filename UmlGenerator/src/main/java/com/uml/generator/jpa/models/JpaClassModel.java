@@ -3,14 +3,14 @@
  */
 package com.uml.generator.jpa.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import lombok.Setter;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.uml.generator.classDiagram.models.ClassModel;
 import com.uml.generator.classDiagram.models.ClassType;
 
@@ -31,9 +31,10 @@ public class JpaClassModel extends ClassModel {
 	private String tableName;
 	@Setter
 	private JpaEntityType jpaEntityType;
-	private final Map<String, JpaDependencyType> jpaDependencies = new HashMap<String, JpaDependencyType>(5);
-	private final List<String> columns = new ArrayList<String>(5);
-	private final List<String> idColumns = new ArrayList<String>(5);
+	private final Map<String, JpaDependencyType> jpaDependencies = Maps
+			.newHashMap();
+	private final List<String> columns = Lists.newArrayList();
+	private final List<String> idColumns = Lists.newArrayList();
 	private final StringBuffer note = new StringBuffer();
 
 	public JpaClassModel(final String name) {
