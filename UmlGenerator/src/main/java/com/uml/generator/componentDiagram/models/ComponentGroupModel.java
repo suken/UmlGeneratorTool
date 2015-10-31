@@ -37,7 +37,7 @@ public class ComponentGroupModel extends UmlModel {
 	 */
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		uml.append(GROUP).append(GROUP_NAME_PRE_POST_FIX).append(name)
 		.append(GROUP_NAME_PRE_POST_FIX).append(OPEN_PARENTHESIS);
 		uml.append(NEW_LINE);
@@ -52,7 +52,7 @@ public class ComponentGroupModel extends UmlModel {
 	}
 
 	public String getDependencyUML() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		for (ComponentModel component : components.values()) {
 			uml.append(component.getDependencyUML()).append(NEW_LINE);
 		}

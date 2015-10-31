@@ -34,8 +34,7 @@ public class SpringClassModel extends ClassModel {
 
 	private final StringBuffer note = new StringBuffer();
 
-	private final Map<String, DependencyType> springDependencies = Maps
-			.newHashMap();
+	private final Map<String, DependencyType> springDependencies = Maps.newHashMap();
 
 	public SpringClassModel(final String name) {
 		super(name);
@@ -54,7 +53,7 @@ public class SpringClassModel extends ClassModel {
 	 */
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		uml.append(ClassType.convert(getType())).append(getName());
 
 		switch (springClassType) {

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.uml.generator.componentDiagram;
 
@@ -43,18 +43,18 @@ public class ComponentDiagramGenerator {
 		MavenXpp3Reader reader = new MavenXpp3Reader();
 		String[] includePatterns = includePatternsString.split(",");
 		String[] excludePatterns = excludePatternsString.split(",");
-		
+
 		// process all POM files
 		for (File pomFile : pomFiles) {
 			Model model = reader.read(new FileInputStream(pomFile));
 			MavenProject project = new MavenProject(model);
-			
+
 			// check if the packaging is jar
 			if (!project.getPackaging().equalsIgnoreCase("pom")) {
 				String groupId = project.getGroupId();
 				ComponentModel component = new ComponentModel(project.getArtifactId(), ComponentType.SOURCE);
 				diagramModel.addComponent(component, groupId);
-				
+
 				// find out dependencies
 				for (Dependency dependency : project.getDependencies()) {
 					// only add the dependency if it satisfies the include/exclude patterns
@@ -75,25 +75,25 @@ public class ComponentDiagramGenerator {
 				&& includePatterns[0].isEmpty() && excludePatterns[0].isEmpty()) {
 			return true;
 		}
-		
+
 		// check exclude patterns
 		for (String patternText : excludePatterns) {
 			if (!patternText.isEmpty()) {
 				Pattern pattern = Pattern.compile(patternText);
 				Matcher matcher = pattern.matcher(artifactId);
 				if (matcher.matches()) {
-					return false; 
+					return false;
 				}
 			}
 		}
-		
+
 		// check for include pattern
 		for (String patternText : includePatterns) {
 			if (!patternText.isEmpty()) {
 				Pattern pattern = Pattern.compile(patternText);
 				Matcher matcher = pattern.matcher(artifactId);
 				if (matcher.matches()) {
-					return true; 
+					return true;
 				}
 			}
 		}
@@ -126,7 +126,7 @@ public class ComponentDiagramGenerator {
 					return file.isDirectory();
 				}
 			});
-			
+
 			if (directories != null) {
 				// recursive call to get all POM files
 				for (File dir : directories) {
@@ -138,4 +138,3 @@ public class ComponentDiagramGenerator {
 	}
 
 }
- 

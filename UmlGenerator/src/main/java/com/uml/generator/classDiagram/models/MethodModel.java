@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.uml.generator.classDiagram.models;
 
@@ -14,9 +14,9 @@ import com.uml.generator.models.UmlModel;
 public class MethodModel extends UmlModel {
 
 	private final String name;
-	
+
 	private ModifierType access;
-	
+
 	public MethodModel(final String name, final int modifier) {
 		this.name = name;
 		switch (modifier) {
@@ -34,7 +34,7 @@ public class MethodModel extends UmlModel {
 			break;
 		}
 	}
-	
+
 	public boolean isPublicOrProtected() {
 		return !(access == ModifierType.PRIVATE);
 	}

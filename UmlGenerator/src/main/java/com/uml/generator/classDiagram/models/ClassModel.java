@@ -73,7 +73,7 @@ public class ClassModel extends UmlModel {
 
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		uml.append(ClassType.convert(type)).append(name).append(OPEN_PARENTHESIS).append(NEW_LINE);
 		getFieldsUml(uml);
 
@@ -88,7 +88,7 @@ public class ClassModel extends UmlModel {
 		return uml.toString();
 	}
 
-	protected void getDepenciesUml(final StringBuffer uml) {
+	protected void getDepenciesUml(final StringBuilder uml) {
 		if (parent != null) {
 			uml.append(NEW_LINE).append(name).append(EXTENDS).append(parent);
 		}
@@ -104,7 +104,7 @@ public class ClassModel extends UmlModel {
 		}
 	}
 
-	protected void getMethodsUml(final StringBuffer uml) {
+	protected void getMethodsUml(final StringBuilder uml) {
 		for (MethodModel method : methods) {
 			if (method.isPublicOrProtected()) {
 				uml.append(method.getUml());
@@ -113,7 +113,7 @@ public class ClassModel extends UmlModel {
 		}
 	}
 
-	protected void getFieldsUml(final StringBuffer uml) {
+	protected void getFieldsUml(final StringBuilder uml) {
 		// all public fields
 		for (FieldModel field : fields) {
 			if (field.isPublicOrProtected()) {

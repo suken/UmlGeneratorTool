@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.uml.generator.classDiagram.models;
 
@@ -13,9 +13,9 @@ import com.uml.generator.models.UmlModel;
 public class FieldModel extends UmlModel {
 
 	private String name;
-	
+
 	private String type;
-	
+
 	private ModifierType access;
 
 	public FieldModel(String name, String type, int modifier) {
@@ -36,11 +36,11 @@ public class FieldModel extends UmlModel {
 			break;
 		}
 	}
-	
+
 	public boolean isPublicOrProtected() {
 		return !(access == ModifierType.PRIVATE);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -55,5 +55,5 @@ public class FieldModel extends UmlModel {
 		}
 		return modifier + type + SPACE + name;
 	}
-	
+
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.uml.generator;
 
@@ -26,8 +26,8 @@ import com.uml.generator.spring.SpringDependencyDiagramGenerator;
  * @author sukenshah
  */
 public class UmlGenerator {
-	
-	private static final Logger LOGGER = Logger.getLogger("UmlGenerator"); 
+
+	private static final Logger LOGGER = Logger.getLogger("UmlGenerator");
 
 	/**
 	 * Generate the Spring class diagram for the given project jar. The method generates following:
@@ -35,7 +35,7 @@ public class UmlGenerator {
 	 * <li> plant uml text file (*.plantuml)
 	 * <li> class diagram UML file (*.png)
 	 * </ul>
-	 * 
+	 *
 	 * The class diagram generates the followings:
 	 * <ul>
 	 * <li> Fields if {@code fieldsIncluded} set to TRUE
@@ -44,11 +44,11 @@ public class UmlGenerator {
 	 * <li> Implemented interfaces
 	 * <li> Composite class dependencies
 	 * </ul>
-	 * 
+	 *
 	 * <b> Warning </b><br>
 	 * If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
 	 * <p>
-	 * 
+	 *
 	 * @param projectJarUrl URL of the project jar for which the class diagram is to be generated.
 	 * @param jarURLs dependent jars
 	 * @param packagesIncluded Are packages included?
@@ -67,7 +67,7 @@ public class UmlGenerator {
 			Thread.currentThread().setContextClassLoader(classLoader);
 			ClassDiagramModel classDiagramModel = ClassDiagramGenerator.generateClassDependencies(classLoader, projectJarUrl, options);
 			String uml = classDiagramModel.getUml().replace("$", "_Inner");
-			
+
 			// generate the UML and plant uml text files
 			String sourceFilePath = exportToPlantUMLFile(projectName, umlDirPath, uml, "_ClassDiagram");
 			exportToFile(projectName, umlDirPath, sourceFilePath, "_ClassDiagram", options.getFileFormat());
@@ -76,14 +76,14 @@ public class UmlGenerator {
 			Thread.currentThread().setContextClassLoader(loader);
 		}
 	}
-	
+
 	/**
 	 * Generate the Spring class diagram for the given project jar. The method generates following:
 	 * <ul>
 	 * <li> plant uml text file (*.plantuml)
 	 * <li> class diagram UML file (*.png)
 	 * </ul>
-	 * 
+	 *
 	 * In addition to plain class diagram, the spring class diagram also generates followings:
 	 * <ul>
 	 * <li> Autowired depedencies
@@ -97,11 +97,11 @@ public class UmlGenerator {
 	 * <li> Configuration classes
 	 * <li> Additional comments are provided for class level annotations.
 	 * </ul>
-	 * 
+	 *
 	 * <b> Warning </b><br>
 	 * If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
 	 * <p>
-	 * 
+	 *
 	 * @param projectJarUrl URL of the project jar for which the class diagram is to be generated.
 	 * @param jarURLs dependent jars
 	 * @param packagesIncluded Are packages included?
@@ -119,7 +119,7 @@ public class UmlGenerator {
 			URLClassLoader classLoader = new URLClassLoader(jarURLs);
 			Thread.currentThread().setContextClassLoader(classLoader);
 			String uml = SpringDependencyDiagramGenerator.generateSpringDependencies(classLoader, projectJarUrl, options).replace("$", "_Inner");
-			
+
 			// generate the UML and plant uml text files
 			exportToPlantUMLFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram");
 			exportToFile(projectName, umlDirPath, uml, "_SpringDependencyDiagram", options.getFileFormat());
@@ -128,21 +128,21 @@ public class UmlGenerator {
 			Thread.currentThread().setContextClassLoader(loader);
 		}
 	}
-	
+
 	/**
 	 * Generates the component diagram for the given MAVEN project. The method generates the following:
 	 * <ul>
 	 * <li> plantuml text file (*.plantuml)
 	 * <li> component diagram image file (*.png)
 	 * </ul>
-	 * 
+	 *
 	 * <b>NOTE:</b><br>
 	 * The method recursively inspects the given source directory to parse all POM files.
 	 * <p>
-	 * 
+	 *
 	 * <b> Warning </b><br>
 	 * If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
-	 * 
+	 *
 	 * @param srcDir directory which contains the POM files.
 	 * @param projectName Name of the project for which the component diagram is to be generated.
 	 * @param includePatterns regular expression of included artifact id patterns
@@ -156,17 +156,17 @@ public class UmlGenerator {
 		exportToPlantUMLFile(projectName, umlDirPath, uml, "_ComponentDiagram");
 		exportToFile(projectName, umlDirPath, uml, "_ComponentDiagram", options.getFileFormat());
 	}
-	
+
 	/**
 	 * Generates the JPA mapping diagram for the given project. The method generates the following:
 	 * <ul>
 	 * <li> plantuml text file (*.plantuml)
 	 * <li> component diagram image file (*.png)
 	 * </ul>
-	 * 
+	 *
 	 * <b> Warning </b><br>
 	 * If the component diagram is too complicated then the GraphViz may not generate the PNG file. Try opening the plantuml file in plantuml eclipse plugin.
-	 * 
+	 *
 	 * @param srcDir directory which contains the POM files.
 	 * @param projectName Name of the project for which the component diagram is to be generated.
 	 * @param includePatterns regular expression of included artifact id patterns
@@ -181,7 +181,7 @@ public class UmlGenerator {
 			URLClassLoader classLoader = new URLClassLoader(jarURLs);
 			Thread.currentThread().setContextClassLoader(classLoader);
 			String uml = JpaMappingDiagramGenerator.generateJpaDependencies(classLoader, projectJarUrl, options).replace("$", "_Inner");
-			
+
 			// generate the UML and plant uml text files
 			exportToPlantUMLFile(projectName, umlDirPath, uml, "_JPAMappingDiagram");
 			exportToFile(projectName, umlDirPath, uml, "_JPAMappingDiagram", options.getFileFormat());
@@ -202,7 +202,7 @@ public class UmlGenerator {
 		LOGGER.log(Level.INFO, "The UML diagram is generated under " + umlDirPath);
 		return umlStringFile;
 	}
-	
+
 	private static void exportToFile(String projectName, String umlDirPath, String sourceFilePath, String filePostfix, FileFormat format) throws IOException {
 		LOGGER.log(Level.INFO, "Writing PlantUML string to *." + format + " file");
 //		String umlFile = umlDirPath + File.separator + projectName + filePostfix + ".png";
@@ -215,5 +215,5 @@ public class UmlGenerator {
 		SourceFileReader reader = new SourceFileReader(new File(sourceFilePath), new File(umlDirPath), new FileFormatOption(format));
 		reader.getGeneratedImages();
 	}
-	
+
 }

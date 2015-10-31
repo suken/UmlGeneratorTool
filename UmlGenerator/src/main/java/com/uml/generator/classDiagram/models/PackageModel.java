@@ -31,7 +31,7 @@ public class PackageModel extends UmlModel {
 
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		uml.append(" package ").append(name).append(NEW_LINE).append(OPEN_PARENTHESIS);
 		for (ClassModel clazz : classes) {
 			uml.append(clazz.getUml());

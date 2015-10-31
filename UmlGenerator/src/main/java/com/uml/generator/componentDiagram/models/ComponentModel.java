@@ -43,7 +43,7 @@ public class ComponentModel extends UmlModel {
 	 */
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		switch (type) {
 		case DATABASE:
 			uml.append(DATABASE).append("db").append(SPACE).append(OPEN_PARENTHESIS).append(NEW_LINE);
@@ -67,7 +67,7 @@ public class ComponentModel extends UmlModel {
 	}
 
 	public String getDependencyUML() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		// add dependencies
 		String componentName = SOURCE_START + name + END_SOURCE;
 		for (String dependentComponent : dependentComponents) {

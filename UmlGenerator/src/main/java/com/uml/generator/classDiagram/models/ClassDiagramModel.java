@@ -30,7 +30,7 @@ public class ClassDiagramModel extends UmlModel {
 	 */
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+		StringBuilder uml = new StringBuilder();
 		uml.append(START_UML);
 
 		// add number of pages

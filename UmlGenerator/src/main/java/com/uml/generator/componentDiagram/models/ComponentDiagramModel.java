@@ -54,7 +54,7 @@ public class ComponentDiagramModel extends UmlModel {
 	 */
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer(START_UML + NEW_LINE);
+	    StringBuilder uml = new StringBuilder(START_UML + NEW_LINE);
 
 		// add all components without groups
 		for (ComponentModel component : components.values()) {

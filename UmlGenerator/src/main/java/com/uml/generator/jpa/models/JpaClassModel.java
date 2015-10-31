@@ -63,7 +63,7 @@ public class JpaClassModel extends ClassModel {
 
 	@Override
 	public String getUml() {
-		StringBuffer uml = new StringBuffer();
+	    StringBuilder uml = new StringBuilder();
 		uml.append(ClassType.convert(getType())).append(getName());
 
 		switch (jpaEntityType) {
@@ -107,7 +107,7 @@ public class JpaClassModel extends ClassModel {
 		return uml.toString();
 	}
 
-	private void getJpaDependenciesUml(final StringBuffer uml) {
+	private void getJpaDependenciesUml(final StringBuilder uml) {
 		for (Entry<String, JpaDependencyType>  dependency : jpaDependencies.entrySet()) {
 			String dependsUmlString = DEPENDS;
 			if (dependency.getValue() == JpaDependencyType.ONE_TO_ONE
@@ -118,7 +118,7 @@ public class JpaClassModel extends ClassModel {
 		}
 	}
 
-	protected void getColumnsUml(final StringBuffer uml) {
+	protected void getColumnsUml(final StringBuilder uml) {
 		if (!idColumns.isEmpty()) {
 			uml.append(ID_COLUMNS_SEPARATOR).append(NEW_LINE);
 			// all id columns

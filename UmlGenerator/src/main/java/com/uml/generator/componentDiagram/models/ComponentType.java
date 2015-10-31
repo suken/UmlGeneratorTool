@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.uml.generator.componentDiagram.models;
 
